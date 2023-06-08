@@ -291,8 +291,20 @@ const userController = {
             }
         });
     },
-    getVerhuurderMatches: (req, res) => {},
-    getHuurderMatches: (req, res) => {},
+    getVerhuurderMatches: (req, res) => {
+        //TODO: Make matches
+        const id = req.userId
+        res.status(200).json({
+            message: 'NYI: getVerhuurderMatches',
+        });
+    },
+    getHuurderMatches: (req, res) => {
+        //TODO: Make matches
+        const id = req.userId
+        res.status(200).json({
+            message: 'NYI: getHuurderMatches',
+        });
+    },
     getUserById: (req, res) => {
         db.query("SELECT * FROM user WHERE id = ?", [req.userId], (err, userResult) => {
             if (err) {
@@ -353,7 +365,66 @@ const userController = {
             }
         });
     },
-    updateUser: (req, res) => {},
+    updateUser: (req, res) => {
+        const {user, preferences} = req.body;
+        if (req.role === 'Verhuurder') {
+            const sql = "UPDATE user SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
+            db.query(sql, [user.email, user.password, user.firstName, user.lastName, user.phoneNumber, user.address, user.city, user.postalCode, user.country, req.userId], (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        message: 'Something went wrong',
+                        error: err
+                    });
+                } else {
+                    // Provider prefernces table: id, userId, situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, describe, hobby, pet, petDescription, religion, comment, overallcomment
+                    const sql2 = "UPDATE provider_preferences SET situation = ?, house = ?, found = ?, motivation = ?, housePicture = ?, period = ?, nights = ?, roomType = ?, roomSize = ?, furniture = ?, furnitureDescription = ?, price = ?, offer = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, work = ?, workDescription = ?, describe = ?, hobby = ?, pet = ?, petDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?";
+                    db.query(sql2, [preferences.situation, preferences.house, preferences.found, preferences.motivation, preferences.housePicture, preferences.period, preferences.nights, preferences.roomType, preferences.roomSize, preferences.furniture, preferences.furnitureDescription, preferences.price, preferences.offer, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.work, preferences.workDescription, preferences.describe, preferences.hobby, preferences.pet, preferences.petDescription, preferences.religion, preferences.comment, preferences.overallcomment, req.userId], (err, result) => {
+                        if (err) {
+                            res.status(500).json({
+                                message: 'Something went wrong',
+                                error: err
+                            });
+                        } else {
+                            res.status(200).json({
+                                message: 'Successfully updated user',
+                                data: result
+                            });
+                        }
+                    });
+                }
+            });
+        } else if (req.role === 'Huurder') {
+            const sql = "UPDATE user SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
+            db.query(sql, [user.email, user.password, user.firstName, user.lastName, user.phoneNumber, user.address, user.city, user.postalCode, user.country, req.userId], (err, result) => {
+                if (err) {
+                    res.status(500).json({
+                        message: 'Something went wrong',
+                        error: err
+                    });
+                } else {
+                    // Seeker preferences table: id, userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment,	overallcomment
+                    const sql2 = "UPDATE seeker_preferences SET seekingCity = ?, liveWith = ?, budget = ?, period = ?, nights = ?, pet = ?, ownPet = ?, ownPetDescription = ?, starDate = ?, endDate = ?, reason = ?, schoolFinished = ?, schoolDoing = ?, skill = ?, work = ?, workDescription = ?, healthRisk = ?, healthRiskDescription = ?, selfDescription = ?, selfWords = ?, idealSpace = ?, offer = ?, offerYou = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?";
+                    db.query(sql2, [preferences.seekingCity, preferences.liveWith, preferences.budget, preferences.period, preferences.nights, preferences.pet, preferences.ownPet, preferences.ownPetDescription, preferences.starDate, preferences.endDate, preferences.reason, preferences.schoolFinished, preferences.schoolDoing, preferences.skill, preferences.work, preferences.workDescription, preferences.healthRisk, preferences.healthRiskDescription, preferences.selfDescription, preferences.selfWords, preferences.idealSpace, preferences.offer, preferences.offerYou, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.religion, preferences.comment, preferences.overallcomment, req.userId], (err, result) => {
+                        if (err) {
+                            res.status(500).json({
+                                message: 'Something went wrong',
+                                error: err
+                            });
+                        } else {
+                            res.status(200).json({
+                                message: 'Successfully updated user',
+                                data: result
+                            });
+                        }
+                    });
+                }
+            });
+        } else {
+            res.status(400).json({
+                message: 'Invalid role'
+            });
+        }
+    },
     deleteUser: (req, res) => {
         const sql = "DELETE FROM user WHERE id = ?";
         db.query(sql, [req.userId], (err, result) => {

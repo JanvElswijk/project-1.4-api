@@ -18,12 +18,13 @@ const authController = {
                     if (bcrypt.compareSync(password, rows[0].password)) {
                         res.status(200).json(
                             {
-                                token: jwt.sign({ id: rows[0].id }, authConfig.secret),
+                                token: jwt.sign({ id: rows[0].id, role: rows[0].role }, authConfig.secret),
                                 user: {
                                     id: rows[0].id,
                                     firstName: rows[0].firstName,
                                     lastName: rows[0].lastName,
                                     emailAddress: rows[0].emailAddress,
+                                    role: rows[0].role,
                                 }
                             }
                         );
@@ -43,6 +44,7 @@ const authController = {
                 res.status(401).json({ error: 'Invalid token' });
             } else {
                 req.userId = decoded.id;
+                req.userRole = decoded.role;
                 next();
             }
         });
