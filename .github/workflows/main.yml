@@ -12,7 +12,7 @@ jobs:
       - name: Print Hello World
         run: echo "Hello, World!"
   Railway-deploy:
-    needs: Tests
+    needs: hello_world_job
     runs-on: ubuntu-latest
     environment:
       name: Railway # naam van mijn environment op GitHub
