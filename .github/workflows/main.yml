@@ -1,0 +1,28 @@
+name: Main deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  Railway-deploy:
+    needs: Tests
+    runs-on: ubuntu-latest
+    environment:
+      name: Railway # naam van mijn environment op GitHub
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@main
+
+      - name: 'Current token'
+        run: |
+          echo "secrets.RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}"
+
+      - name: Install Railway
+        run: npm i -g @railway/cli
+
+      - name: Deploy server to Railway
+        run: railway up
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

@@ -3,6 +3,49 @@ const dateConverter = require('../util/converter').dateConverter;
 const validation = require('../util/validation');
 const bcrypt = require('bcrypt');
 
+const handleError = (err, res) => {
+    console.log(err);
+    res.status(500).json({
+        message: 'Something went wrong',
+        error: err
+    });
+};
+
+const validateInput = (user, preferences, role, res) => {
+    validation.validateUserInput(user, (err) => {
+        if (err) {
+            return res.status(400).json({
+                message: 'Invalid user input',
+                error: err
+            });
+        }
+    });
+
+    if (role === 'Huurder') {
+        validation.validateHuurderPreferencesInput(preferences, (err) => {
+            if (err) {
+                return res.status(400).json({
+                    message: 'Invalid preferences input',
+                    error: err
+                });
+            }
+        });
+    } else if (role === 'Verhuurder') {
+        validation.validateVerhuurderPreferencesInput(preferences, (err) => {
+            if (err) {
+                return res.status(400).json({
+                    message: 'Invalid preferences input',
+                    error: err
+                });
+            }
+        });
+    } else {
+        return res.status(400).json({
+            message: 'Invalid role'
+        });
+    }
+};
+
 // User table: id (auto-increment), emailAddress, password, dataOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role (Verhhurder or Huurder)
 // Seeker preferences table: id, userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment,	overallcomment
 // Provider prefernces table: id, userId, situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, describe, hobby, pet, petDescription, religion, comment, overallcomment
@@ -79,40 +122,27 @@ const bcrypt = require('bcrypt');
 
 const userController = {
     getAllUsers: (req, res) => {
-        db.query('SELECT * FROM user', null, (err, rows) => {
+        db.query('SELECT * FROM user', [], (err, rows) => {
             if (err) {
-                console.log("(getAllUsers) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
-                });
-            } else {
-                console.log("(getAllUsers) amount of rows: " + rows.length);
-                res.status(200).json({
-                    message: 'Successfully fetched all users',
-                    data: rows
-                });
+                return handleError(err, res);
             }
+
+            res.status(200).json({
+                message: 'Successfully fetched all users',
+                data: rows
+            });
         });
     },
     getProfile: (req, res) => {
         db.query('SELECT * FROM user WHERE id = ?', [req.userId], (err, rows) => {
             if (err) {
-                console.log("(getProfile) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
-                });
+                return handleError(err, res);
             } else {
                 if (rows.length > 0) {
                     if (rows[0].role === 'Huurder') {
                         db.query('SELECT * FROM seeker_preferences WHERE userId = ?', [req.userId], (err, rows2) => {
                             if (err) {
-                                console.log("(getProfile) error: " + err);
-                                res.status(500).json({
-                                    message: 'Something went wrong',
-                                    error: err
-                                });
+                                return handleError(err, res);
                             } else {
                                 console.log("(getProfile) amount of rows: " + rows.length);
                                 res.status(200).json({
@@ -125,11 +155,7 @@ const userController = {
                     } else if (rows[0].role === 'Verhuurder') {
                         db.query('SELECT * FROM verhuurder_preferences WHERE userId = ?', [req.userId], (err, rows2) => {
                             if (err) {
-                                console.log("(getProfile) error: " + err);
-                                res.status(500).json({
-                                    message: 'Something went wrong',
-                                    error: err
-                                });
+                                return handleError(err, res);
                             } else {
                                 console.log("(getProfile) amount of rows: " + rows.length);
                                 res.status(200).json({
@@ -156,24 +182,7 @@ const userController = {
 
         user.password = bcrypt.hashSync(user.password, 10);
 
-        validation.validateUserInput(user, (err) => {
-            if (err) {
-                res.status(400).json({
-                    message: 'Invalid user input',
-                    error: err
-                });
-            }
-        });
-
-        validation.validateHuurderPreferencesInput(preferences, (err) => {
-            if (err) {
-                res.status(400).json({
-                    message: 'Invalid preferences input',
-                    error: err
-                });
-            }
-        });
-
+        validateInput(user, preferences, "Verhuurder", res);
 
         const queries = [
             {
@@ -188,11 +197,7 @@ const userController = {
 
         db.executeTransaction(queries, (err, result) => {
             if (err) {
-                console.log("(createVerhuurder) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
-                });
+                return handleError(err, res);
             } else {
                 console.log("(createVerhuurder) result: " + result);
                 res.status(200).json({
@@ -241,13 +246,9 @@ const userController = {
 
         db.executeTransaction(queries, (err, result) => {
             if (err) {
-                console.log("(createHuurder) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
-                });
+                return handleError(err, res);
             } else {
-                console.log("(createHuurder) result: " + result);
+                console.log("(createHuurder) result length: " + result.length);
                 res.status(200).json({
                     message: 'Successfully created huurder',
                     data: result
@@ -259,11 +260,7 @@ const userController = {
         const sql = "SELECT * FROM user WHERE role = 'Verhuurder'";
         db.query(sql, (err, result) => {
             if (err) {
-                console.log("(getAllVerhuurders) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
-                });
+                return handleError(err, res);
             } else {
                 console.log("(getAllVerhuurders) result: " + result);
                 res.status(200).json({
@@ -277,13 +274,9 @@ const userController = {
         const sql = "SELECT * FROM user WHERE role = 'Huurder'";
         db.query(sql, (err, result) => {
             if (err) {
-                console.log("(getAllHuurders) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
-                });
+                return handleError(err, res);
             } else {
-                console.log("(getAllHuurders) result: " + result);
+                console.log("(getAllHuurders) result length: " + result.length);
                 res.status(200).json({
                     message: 'Successfully retrieved all huurders',
                     data: result
@@ -306,136 +299,128 @@ const userController = {
         });
     },
     getUserById: (req, res) => {
-        db.query("SELECT * FROM user WHERE id = ?", [req.userId], (err, userResult) => {
+        db.query("SELECT * FROM user WHERE id = ?", [req.params.id], (err, userResult) => {
             if (err) {
-                console.log("(getUserById) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
+                return handleError(err, res);
+            }
+
+            if (userResult.length === 0) {
+                return res.status(404).json({
+                    message: 'User not found',
                 });
-            } else {
-                if (userResult.length === 0) {
-                    res.status(404).json({
-                        message: 'User not found',
-                    });
-                } else if (userResult[0].role === 'Verhuurder') {
-                    db.query("SELECT * FROM provider_preferences WHERE userId = ?", [req.userId], (err, preferencesResult) => {
+            }
+
+            switch (userResult[0].role) {
+                case 'Verhuurder':
+                    db.query("SELECT * FROM provider_preferences WHERE userId = ?", [req.params.id], (err, preferencesResult) => {
                         if (err) {
-                            console.log("(getUserById) error: " + err);
-                            res.status(500).json({
-                                message: 'Something went wrong',
-                                error: err
-                            });
-                        } else {
-                            console.log("(getUserById) result: " + userResult);
-                            res.status(200).json({
-                                message: 'Successfully retrieved user',
-                                data: {
-                                    user: userResult,
-                                    preferences: preferencesResult
-                                }
-                            });
+                            return handleError(err, res);
                         }
+
+                        const {password, ...sanitizedUser} = userResult[0]
+
+                        res.status(200).json({
+                            message: 'Successfully retrieved user',
+                            data: {
+                                user: sanitizedUser,
+                                preferences: preferencesResult[0]
+                            }
+                        });
                     });
-                } else if (userResult[0].role === 'Huurder') {
-                    db.query("SELECT * FROM seeker_preferences WHERE userId = ?", [req.userId], (err, preferencesResult) => {
+                    break;
+                case 'Huurder':
+                    db.query("SELECT * FROM seeker_preferences WHERE userId = ?", [req.params.id], (err, preferencesResult) => {
                         if (err) {
-                            console.log("(getUserById) error: " + err);
-                            res.status(500).json({
-                                message: 'Something went wrong',
-                                error: err
-                            });
-                        } else {
-                            console.log("(getUserById) result: " + userResult);
-                            res.status(200).json({
-                                message: 'Successfully retrieved user',
-                                data: {
-                                    user: userResult,
-                                    preferences: preferencesResult
-                                }
-                            });
+                            return handleError(err, res);
                         }
+
+                        const {password, ...sanitizedUser} = userResult[0]
+
+                        res.status(200).json({
+                            message: 'Successfully retrieved user',
+                            data: {
+                                user: sanitizedUser,
+                                preferences: preferencesResult[0]
+                            }
+                        });
                     });
-                } else {
-                    console.log(userResult[0].role)
+                    break;
+                default:
                     res.status(400).json({
                         message: 'Invalid role'
                     });
-                }
+                    break;
             }
         });
     },
     updateUser: (req, res) => {
-        const {user, preferences} = req.body;
-        if (req.role === 'Verhuurder') {
-            const sql = "UPDATE user SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
-            db.query(sql, [user.email, user.password, user.firstName, user.lastName, user.phoneNumber, user.address, user.city, user.postalCode, user.country, req.userId], (err, result) => {
-                if (err) {
-                    res.status(500).json({
-                        message: 'Something went wrong',
-                        error: err
-                    });
-                } else {
-                    // Provider prefernces table: id, userId, situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, describe, hobby, pet, petDescription, religion, comment, overallcomment
-                    const sql2 = "UPDATE provider_preferences SET situation = ?, house = ?, found = ?, motivation = ?, housePicture = ?, period = ?, nights = ?, roomType = ?, roomSize = ?, furniture = ?, furnitureDescription = ?, price = ?, offer = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, work = ?, workDescription = ?, describe = ?, hobby = ?, pet = ?, petDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?";
-                    db.query(sql2, [preferences.situation, preferences.house, preferences.found, preferences.motivation, preferences.housePicture, preferences.period, preferences.nights, preferences.roomType, preferences.roomSize, preferences.furniture, preferences.furnitureDescription, preferences.price, preferences.offer, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.work, preferences.workDescription, preferences.describe, preferences.hobby, preferences.pet, preferences.petDescription, preferences.religion, preferences.comment, preferences.overallcomment, req.userId], (err, result) => {
-                        if (err) {
-                            res.status(500).json({
-                                message: 'Something went wrong',
-                                error: err
-                            });
-                        } else {
-                            res.status(200).json({
-                                message: 'Successfully updated user',
-                                data: result
-                            });
-                        }
-                    });
-                }
-            });
-        } else if (req.role === 'Huurder') {
-            const sql = "UPDATE user SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
-            db.query(sql, [user.email, user.password, user.firstName, user.lastName, user.phoneNumber, user.address, user.city, user.postalCode, user.country, req.userId], (err, result) => {
-                if (err) {
-                    res.status(500).json({
-                        message: 'Something went wrong',
-                        error: err
-                    });
-                } else {
-                    // Seeker preferences table: id, userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment,	overallcomment
-                    const sql2 = "UPDATE seeker_preferences SET seekingCity = ?, liveWith = ?, budget = ?, period = ?, nights = ?, pet = ?, ownPet = ?, ownPetDescription = ?, starDate = ?, endDate = ?, reason = ?, schoolFinished = ?, schoolDoing = ?, skill = ?, work = ?, workDescription = ?, healthRisk = ?, healthRiskDescription = ?, selfDescription = ?, selfWords = ?, idealSpace = ?, offer = ?, offerYou = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?";
-                    db.query(sql2, [preferences.seekingCity, preferences.liveWith, preferences.budget, preferences.period, preferences.nights, preferences.pet, preferences.ownPet, preferences.ownPetDescription, preferences.starDate, preferences.endDate, preferences.reason, preferences.schoolFinished, preferences.schoolDoing, preferences.skill, preferences.work, preferences.workDescription, preferences.healthRisk, preferences.healthRiskDescription, preferences.selfDescription, preferences.selfWords, preferences.idealSpace, preferences.offer, preferences.offerYou, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.religion, preferences.comment, preferences.overallcomment, req.userId], (err, result) => {
-                        if (err) {
-                            res.status(500).json({
-                                message: 'Something went wrong',
-                                error: err
-                            });
-                        } else {
-                            res.status(200).json({
-                                message: 'Successfully updated user',
-                                data: result
-                            });
-                        }
-                    });
-                }
-            });
-        } else {
-            res.status(400).json({
+        const { user, preferences } = req.body;
+        const { role, userId } = req;
+
+        if (role !== 'Verhuurder' && role !== 'Huurder') {
+            return res.status(400).json({
                 message: 'Invalid role'
             });
         }
+
+        const updateUserQuery = "UPDATE user SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
+        const updatePreferencesQuery =
+            role === 'Verhuurder'
+                ? "UPDATE provider_preferences SET situation = ?, house = ?, found = ?, motivation = ?, housePicture = ?, period = ?, nights = ?, roomType = ?, roomSize = ?, furniture = ?, furnitureDescription = ?, price = ?, offer = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, work = ?, workDescription = ?, describe = ?, hobby = ?, pet = ?, petDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?"
+                : "UPDATE seeker_preferences SET seekingCity = ?, liveWith = ?, budget = ?, period = ?, nights = ?, pet = ?, ownPet = ?, ownPetDescription = ?, starDate = ?, endDate = ?, reason = ?, schoolFinished = ?, schoolDoing = ?, skill = ?, work = ?, workDescription = ?, healthRisk = ?, healthRiskDescription = ?, selfDescription = ?, selfWords = ?, idealSpace = ?, offer = ?, offerYou = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?";
+
+        const updateUserParams = [
+            user.email, user.password, user.firstName, user.lastName, user.phoneNumber, user.address,
+            user.city, user.postalCode, user.country, userId
+        ];
+        const updatePreferencesParams =
+            role === 'Verhuurder'
+                ? [
+                    preferences.situation, preferences.house, preferences.found, preferences.motivation,
+                    preferences.housePicture, preferences.period, preferences.nights, preferences.roomType,
+                    preferences.roomSize, preferences.furniture, preferences.furnitureDescription, preferences.price,
+                    preferences.offer, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription,
+                    preferences.work, preferences.workDescription, preferences.describe, preferences.hobby, preferences.pet,
+                    preferences.petDescription, preferences.religion, preferences.comment, preferences.overallcomment, userId
+                ]
+                : [
+                    preferences.seekingCity, preferences.liveWith, preferences.budget, preferences.period,
+                    preferences.nights, preferences.pet, preferences.ownPet, preferences.ownPetDescription,
+                    preferences.starDate, preferences.endDate, preferences.reason, preferences.schoolFinished,
+                    preferences.schoolDoing, preferences.skill, preferences.work, preferences.workDescription,
+                    preferences.healthRisk, preferences.healthRiskDescription, preferences.selfDescription,
+                    preferences.selfWords, preferences.idealSpace, preferences.offer, preferences.offerYou,
+                    preferences.importantNote, preferences.volunteer, preferences.volunteerDescription,
+                    preferences.religion, preferences.comment, preferences.overallcomment, userId
+                ];
+
+        const handleUpdateSuccess = (result) => {
+            res.status(200).json({
+                message: 'Successfully updated user',
+                data: result
+            });
+        };
+
+        db.query(updateUserQuery, updateUserParams, (err, result) => {
+            if (err) {
+                return handleError(err, res);
+            }
+            db.query(updatePreferencesQuery, updatePreferencesParams, (err, result) => {
+                if (err) {
+                    return handleError(err, res);
+                }
+
+                handleUpdateSuccess(result);
+            });
+        });
     },
     deleteUser: (req, res) => {
         const sql = "DELETE FROM user WHERE id = ?";
         db.query(sql, [req.userId], (err, result) => {
             if (err) {
-                console.log("(deleteUser) error: " + err);
-                res.status(500).json({
-                    message: 'Something went wrong',
-                    error: err
-                });
+                return handleError(err, res);
             } else {
-                console.log("(deleteUser) result: " + result);
+                console.log("(deleteUser) result length: " + result.length);
                 res.status(200).json({
                     message: 'Successfully deleted user',
                     data: result
