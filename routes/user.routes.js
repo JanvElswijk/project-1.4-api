@@ -1,10 +1,16 @@
 const router = require('express').Router();
 const userController = require('../controllers/user.controller');
+const authController = require('../controllers/auth.controller');
 
-// TODO: Add authentication
+
+// Login, get token back
+router.post('/login', authController.login);
 
 // Get all users, no preferences
 router.get('/', userController.getAllUsers);
+
+// Get profile of logged in user, including preferences
+router.get('/profile', authController.validateToken, userController.getProfile);
 
 // Create a new user including preferences in a seperate table (one-to-one relationship) (seperate preferences for "Huurder" and "Verhuurder")
 router.post('/verhuurder', userController.createVerhuurder);
@@ -14,16 +20,15 @@ router.post('/huurder', userController.createHuurder);
 router.get('/verhuurder', userController.getAllVerhuurders); // This can further be filtered by preferences, using query parameters
 router.get('/huurder', userController.getAllHuurders); // This can further be filtered by preferences, using query parameters
 
-// Get a single user, including preferences
-router.get('/verhuurder/:id', userController.getVerhuurderById); // This can further be filtered by preferences, using query parameters
-router.get('/huurder/:id', userController.getHuurderById); // This can further be filtered by preferences, using query parameters
+//TODO: this
+router.post('/verhuurder/match', authController.validateToken, userController.getVerhuurderMatches); // Get all verhuurders that match the preferences of the huurder whose id is in the body and give a percentage of how much they match
+router.post('/huurder/match', authController.validateToken, userController.getHuurderMatches); // Get all huurders that match the preferences of the verhuurder whose id is in the body and give a percentage of how much they match
 
-// Update a user, including preferences
-router.put('/verhuurder/:id', userController.updateVerhuurderById); // This can further be filtered by preferences, using query parameters
-router.put('/huurder/:id', userController.updateHuurderById); // This can further be filtered by preferences, using query parameters
-
-// Delete a user, including preferences
-router.delete('/verhuurder/:id', userController.deleteVerhuurderById); // This can further be filtered by preferences, using query parameters
-router.delete('/huurder/:id', userController.deleteHuurderById); // This can further be filtered by preferences, using query parameters
+// Get a single user, with preferences, check if user is verhuurder or huurder
+router.get('/:id', userController.getUserById);
+// Update a user, with preferences, check if user is verhuurder or huurder and update preferences as well
+router.put('/:id', authController.validateToken, userController.updateUser);
+// Delete a user, with preferences, check if user is verhuurder or huurder and delete preferences as well
+router.delete('/:id', authController.validateToken, userController.deleteUser);
 
 module.exports = router;

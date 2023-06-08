@@ -17,6 +17,5 @@ app.get('/about', (req, res) => {
 app.use('/api/user', userRoutes);
 
 app.listen(port, () => {
-    //TODO: User logger
     console.log(`Example app listening at http://localhost:${port}`);
 });
