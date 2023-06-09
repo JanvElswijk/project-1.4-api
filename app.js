@@ -6,7 +6,8 @@ const userRoutes = require('./routes/user.routes');
 
 const bodyParser = require('body-parser');
 
-app.use(bodyParser.json());
+// set a limit of 50mb for the body-parser
+app.use(bodyParser.json({ limit: '50mb' }));
 
 app.get('/', (req, res) => {
     //TODO: Add home page
