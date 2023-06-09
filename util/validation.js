@@ -144,22 +144,22 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(preferences.situation, 'Situation is required');
         const situations = ['Alleenstaand', 'Met partner', 'Met huisgenoot', 'Met kinderen', 'Anders'];
         assert(situations.includes(preferences.situation), 'Situation is invalid');
-        assert(preferences.house === 0 || preferences.house === 1, 'House is required');
+        assert(preferences.house === 0|| preferences.house === 1, 'House is required');
         assert(typeof preferences.house === 'string', 'House is invalid');
         assert(preferences.found, 'Found is required');
         assert(typeof preferences.found === 'string', 'Found is invalid');
         assert(preferences.motivation, 'Motivation is required');
         assert(typeof preferences.motivation === 'string', 'Motivation is invalid');
         assert(preferences.period, 'Period is required');
-        const periods = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
+        const periods = ['1 maand(en)', '2 maand(en)', '3 maand(en)', '4 maand(en)', '5 maand(en)', '6 maand(en)', '7 maand(en)', '8 maand(en)', '9 maand(en)', '10 maand(en)', '11 maand(en)'];
         assert(periods.includes(preferences.period), 'Period is invalid');
         assert(preferences.nights, 'Nights is required');
-        const nights = ['1', '2', '3', '4', '5', '6', '7'];
+        const nights = ['1 dag', '2 dagen', '3 dagen', '4 dagen', '5 dagen', '6 dagen', '7 dagen'];
         assert(nights.includes(preferences.nights), 'Nights is invalid');
         assert(preferences.roomType, 'Room type is required');
         assert(typeof preferences.roomType === 'string', 'Room type is invalid');
         assert(preferences.roomSize, 'Room size is required');
-        assert(typeof preferences.roomSize === 'number', 'Room size is invalid');
+        assert(typeof preferences.roomSize === 'string', 'Room size is invalid');
         assert(preferences.furniture === 1 || preferences.furniture === 0, 'Furniture is required');
         assert(typeof preferences.furniture === 'number', 'Furniture is invalid');
         // Check if furniture description is present, if so, check if it's a string and if not, don't check

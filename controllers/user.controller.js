@@ -176,6 +176,14 @@ const userController = {
     },
     createVerhuurder: (req, res) => {
         const { user, preferences } = req.body;
+
+
+        preferences.house = preferences.house === 'Nee' ? 0 : 1;
+        preferences.furniture = preferences.furniture === 'Nee' ? 0 : 1;
+        preferences.volunteer = preferences.volunteer === 'Nee' ? 0 : 1;
+        preferences.work = preferences.work === 'Nee' ? 0 : 1;
+        preferences.pet = preferences.pet === 'Nee' ? 0 : 1;
+
         user.dateOfBirth = dateConverter(user.dateOfBirth)
 
         user.password = bcrypt.hashSync(user.password, 10);
