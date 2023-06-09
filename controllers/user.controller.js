@@ -209,8 +209,9 @@ const userController = {
     },
     createHuurder: (req, res) => {
         const { user, preferences } = req.body;
-        console.log(user.dateOfBirth)
-        console.log(dateConverter(user.dateOfBirth))
+        console.log(req.body)
+        console.log(user.emailAddress)
+        console.log(dateConverter(user.password))
         user.dateOfBirth = dateConverter(user.dateOfBirth)
         console.log(preferences.starDate)
         console.log(dateConverter(preferences.starDate))
