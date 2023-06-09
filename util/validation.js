@@ -221,7 +221,7 @@ const validateHuurderPreferencesInput = (preferences) => {
         const liveWith = ['M', 'V', 'K'];
         assert(liveWith.includes(preferences.liveWith), 'Live with is invalid');
         assert(preferences.budget, 'Budget is required');
-        assert(typeof preferences.budget === 'number', 'Budget is invalid');
+        assert(typeof preferences.budget === 'string', 'Budget is invalid');
         assert(preferences.period, 'Period is required');
         const periods = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
         assert(periods.includes(preferences.period), 'Period is invalid');
