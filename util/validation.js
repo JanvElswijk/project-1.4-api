@@ -145,7 +145,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         const situations = ['Alleenstaand', 'Met partner', 'Met huisgenoot', 'Met kinderen', 'Anders'];
         assert(situations.includes(preferences.situation), 'Situation is invalid');
         assert(preferences.house === 0|| preferences.house === 1, 'House is required');
-        assert(typeof preferences.house === 'string', 'House is invalid');
+        assert(typeof preferences.house === 'number', 'House is invalid');
         assert(preferences.found, 'Found is required');
         assert(typeof preferences.found === 'string', 'Found is invalid');
         assert(preferences.motivation, 'Motivation is required');
