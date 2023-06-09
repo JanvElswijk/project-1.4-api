@@ -127,7 +127,7 @@ const validateUserInput = (user) => {
         assert(user.street, 'Street is required');
         assert(typeof user.street === 'string', 'Street is invalid');
         assert(user.houseNumber, 'House number is required');
-        assert(typeof user.houseNumber === 'number', 'House number is invalid');
+        assert(typeof user.houseNumber === 'string', 'House number is invalid');
         assert(user.city, 'City is required');
         assert(typeof user.city === 'string', 'City is invalid');
         assert(user.country, 'Country is required');
