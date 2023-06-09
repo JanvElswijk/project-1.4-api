@@ -186,12 +186,12 @@ const userController = {
 
         const queries = [
             {
-                sql: "INSERT INTO `user` (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Huurder')",
+                sql: "INSERT INTO `user` (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Huurder')",
                 params: [user.emailAddress, user.password, user.dateOfBirth, user.firstName, user.middleName, user.lastName, user.picture, user.gender, user.phoneNumber, user.postalCode, user.street, user.houseNumber, user.city, user.country]
             },
             {
-                sql: "INSERT INTO `verhuurder_preferences` (userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate, endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment, overallcomment) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                params: [preferences.seekingCity, preferences.liveWith, preferences.budget, preferences.period, preferences.nights, preferences.pet, preferences.ownPet, preferences.ownPetDescription, preferences.starDate, preferences.endDate, preferences.reason, preferences.schoolFinished, preferences.schoolDoing, preferences.skill, preferences.work, preferences.workDescription, preferences.healthRisk, preferences.healthRiskDescription, preferences.selfDescription, preferences.selfWords, preferences.idealSpace, preferences.offer, preferences.offerYou, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.religion, preferences.comment, preferences.overallcomment]
+                sql: "INSERT INTO `provider_preferences` (situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, describe, hobby, pet, petDescription, religion, comment, overallcomment, role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'Verhuurder')",
+                params: [preferences.situation, preferences.house, preferences.found, preferences.motivation, preferences.housePicture, preferences.period, preferences.nights, preferences.roomType, preferences.roomSize, preferences.furniture, preferences.furnitureDescription, preferences.price, preferences.offer, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.work, preferences.workDescription, preferences.describe, preferences.hobby, preferences.pet, preferences.petDescription, preferences.religion, preferences.comment, preferences.overallcomment]
             }
         ];
 
