@@ -121,7 +121,7 @@ const validateUserInput = (user) => {
         assert(user.gender, 'Gender is required')
         assert(genders.includes(user.gender), 'Gender is invalid')
         assert(user.phoneNumber, 'Phone number is required');
-        assert(typeof user.phoneNumber === 'string', 'Phone number is invalid');
+        assert(typeof user.phoneNumber === 'number', 'Phone number is invalid');
         assert(user.postalCode, 'Postal code is required');
         assert(typeof user.postalCode === 'string', 'Postal code is invalid');
         assert(user.street, 'Street is required');
@@ -144,7 +144,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(preferences.situation, 'Situation is required');
         const situations = ['Alleenstaand', 'Met partner', 'Met huisgenoot', 'Met kinderen', 'Anders'];
         assert(situations.includes(preferences.situation), 'Situation is invalid');
-        assert(preferences.house, 'House is required');
+        assert(preferences.house === 0 || preferences.house === 1, 'House is required');
         assert(typeof preferences.house === 'number', 'House is invalid');
         assert(preferences.found, 'Found is required');
         assert(typeof preferences.found === 'string', 'Found is invalid');
@@ -160,14 +160,14 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(typeof preferences.roomType === 'string', 'Room type is invalid');
         assert(preferences.roomSize, 'Room size is required');
         assert(typeof preferences.roomSize === 'number', 'Room size is invalid');
-        assert(preferences.furniture, 'Furniture is required');
+        assert(preferences.furniture === 1 || preferences.furniture === 0, 'Furniture is required');
         assert(typeof preferences.furniture === 'number', 'Furniture is invalid');
         // Check if furniture description is present, if so, check if it's a string and if not, don't check
         if (preferences.furnitureDescription) {
             assert(typeof preferences.furnitureDescription === 'string', 'Furniture description is invalid');
         }
         assert(preferences.price, 'Price is required');
-        assert(typeof preferences.price === 'string', 'Price is invalid');
+        assert(typeof preferences.price === 'number', 'Price is invalid');
         assert(preferences.offer, 'Offer is required');
         assert(typeof preferences.offer === 'string', 'Offer is invalid');
         assert(preferences.importantNote, 'Important note is required');
@@ -189,7 +189,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(typeof preferences.describe === 'string', 'Describe is invalid');
         assert(preferences.hobby, 'Hobby is required');
         assert(typeof preferences.hobby === 'string', 'Hobby is invalid');
-        assert(preferences.pet, 'Pet is required');
+        assert(preferences.pet === 1 || preferences.pet === 0, 'Pet is required');
         assert(typeof preferences.pet === 'number', 'Pet is invalid');
         // Check if pet description is present, if so, check if it's a string and if not, don't check
         if (preferences.petDescription) {
@@ -221,7 +221,7 @@ const validateHuurderPreferencesInput = (preferences) => {
         const liveWith = ['M', 'V', 'K', ''];
         assert(liveWith.includes(preferences.liveWith), 'Live with is invalid');
         assert(preferences.budget, 'Budget is required');
-        assert(typeof preferences.budget === 'string', 'Budget is invalid');
+        assert(typeof preferences.budget === 'number', 'Budget is invalid');
         assert(preferences.period, 'Period is required');
         const periods = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
         assert(periods.includes(preferences.period), 'Period is invalid');
