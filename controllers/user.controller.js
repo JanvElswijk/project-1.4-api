@@ -1,5 +1,5 @@
 const db = require('../util/mysql.db');
-const dateConverter = require('../util/converter').dateConverter;
+// const dateConverter = require('../util/converter').dateConverter;
 const validation = require('../util/validation');
 const bcrypt = require('bcrypt');
 
@@ -211,14 +211,17 @@ const userController = {
         const { user, preferences } = req.body;
         console.log(req.body)
         console.log(user.emailAddress)
-        console.log(dateConverter(user.password))
-        user.dateOfBirth = dateConverter(user.dateOfBirth)
-        console.log(preferences.starDate)
-        console.log(dateConverter(preferences.starDate))
-        preferences.starDate = dateConverter(preferences.starDate)
-        console.log(preferences.endDate)
-        console.log(dateConverter(preferences.endDate))
-        preferences.endDate = dateConverter(preferences.endDate)
+        // console.log(dateConverter(user.password))
+        // user.dateOfBirth = dateConverter(user.dateOfBirth)
+        // // --STAR--DATE
+        // console.log(preferences.starDate)
+        // // --STAR--DATE
+        // console.log(dateConverter(preferences.starDate))
+        // // --STAR--DATE
+        // preferences.starDate = dateConverter(preferences.starDate)
+        // console.log(preferences.endDate)
+        // console.log(dateConverter(preferences.endDate))
+        // preferences.endDate = dateConverter(preferences.endDate)
 
         user.password = bcrypt.hashSync(user.password, 10);
 
@@ -245,7 +248,7 @@ const userController = {
                 sql: "INSERT INTO `user` (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Huurder')",
                 params: [user.emailAddress, user.password, user.dateOfBirth, user.firstName, user.middleName, user.lastName, user.picture, user.gender, user.phoneNumber, user.postalCode, user.street, user.houseNumber, user.city, user.country]
             },
-            {
+            {// --STAR--DATE// --STAR--DATE// --STAR--DATE// --STAR--DATE// --STAR--DATE
                 sql: "INSERT INTO `seeker_preferences` (userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate, endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment, overallcomment) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 params: [preferences.seekingCity, preferences.liveWith, preferences.budget, preferences.period, preferences.nights, preferences.pet, preferences.ownPet, preferences.ownPetDescription, preferences.starDate, preferences.endDate, preferences.reason, preferences.schoolFinished, preferences.schoolDoing, preferences.skill, preferences.work, preferences.workDescription, preferences.healthRisk, preferences.healthRiskDescription, preferences.selfDescription, preferences.selfWords, preferences.idealSpace, preferences.offer, preferences.offerYou, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.religion, preferences.comment, preferences.overallcomment]
             }
