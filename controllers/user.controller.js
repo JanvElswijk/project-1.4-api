@@ -222,6 +222,13 @@ const userController = {
         console.log(dateConverter(preferences.endDate))
         preferences.endDate = dateConverter(preferences.endDate)
 
+        preferences.pet = preferences.pet === 'Nee' ? 0 : 1;
+        preferences.ownPet = preferences.ownPet === 'Nee' ? 0 : 1;
+        preferences.work = preferences.work === 'Nee' ? 0 : 1;
+        preferences.healthRisk = preferences.healthRisk === 'Nee' ? 0 : 1;
+        preferences.volunteer = preferences.volunteer === 'Nee' ? 0 : 1;
+
+
         user.password = bcrypt.hashSync(user.password, 10);
 
         validation.validateUserInput(user, (err) => {

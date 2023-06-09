@@ -167,7 +167,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
             assert(typeof preferences.furnitureDescription === 'string', 'Furniture description is invalid');
         }
         assert(preferences.price, 'Price is required');
-        assert(typeof preferences.price === 'number', 'Price is invalid');
+        assert(typeof preferences.price === 'string', 'Price is invalid');
         assert(preferences.offer, 'Offer is required');
         assert(typeof preferences.offer === 'string', 'Offer is invalid');
         assert(preferences.importantNote, 'Important note is required');
