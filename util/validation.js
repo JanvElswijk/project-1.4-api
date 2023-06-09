@@ -151,10 +151,10 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(preferences.motivation, 'Motivation is required');
         assert(typeof preferences.motivation === 'string', 'Motivation is invalid');
         assert(preferences.period, 'Period is required');
-        const periods = ['1 maand(en)', '2 maand(en)', '3 maand(en)', '4 maand(en)', '5 maand(en)', '6 maand(en)', '7 maand(en)', '8 maand(en)', '9 maand(en)', '10 maand(en)', '11 maand(en)'];
+        const periods = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11'];
         assert(periods.includes(preferences.period), 'Period is invalid');
         assert(preferences.nights, 'Nights is required');
-        const nights = ['1 dag', '2 dagen', '3 dagen', '4 dagen', '5 dagen', '6 dagen', '7 dagen'];
+        const nights = ['1', '2', '3', '4', '5', '6', '7'];
         assert(nights.includes(preferences.nights), 'Nights is invalid');
         assert(preferences.roomType, 'Room type is required');
         assert(typeof preferences.roomType === 'string', 'Room type is invalid');
