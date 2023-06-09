@@ -208,6 +208,7 @@ const userController = {
         });
     },
     createHuurder: (req, res) => {
+        console.log(req.body)
         const { user, preferences } = req.body;
         user.dateOfBirth = dateConverter(user.dateOfBirth)
         preferences.startDate = dateConverter(preferences.startDate)
