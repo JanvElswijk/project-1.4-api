@@ -177,8 +177,6 @@ const userController = {
     createVerhuurder: (req, res) => {
         const { user, preferences } = req.body;
         user.dateOfBirth = dateConverter(user.dateOfBirth)
-        preferences.startDate = dateConverter(preferences.startDate)
-        preferences.endDate = dateConverter(preferences.endDate)
 
         user.password = bcrypt.hashSync(user.password, 10);
 
