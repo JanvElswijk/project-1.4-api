@@ -196,7 +196,7 @@ const userController = {
                 params: [user.emailAddress, user.password, user.dateOfBirth, user.firstName, user.middleName, user.lastName, user.picture, user.gender, user.phoneNumber, user.postalCode, user.street, user.houseNumber, user.city, user.country]
             },
             {
-                sql: "INSERT INTO `provider_preferences` (situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, describe, hobby, pet, petDescription, religion, comment, overallcomment, role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'Verhuurder')",
+                sql: "INSERT INTO `provider_preferences` (situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, `describe`, hobby, pet, petDescription, religion, comment, overallcomment, role) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'Verhuurder')",
                 params: [preferences.situation, preferences.house, preferences.found, preferences.motivation, preferences.housePicture, preferences.period, preferences.nights, preferences.roomType, preferences.roomSize, preferences.furniture, preferences.furnitureDescription, preferences.price, preferences.offer, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.work, preferences.workDescription, preferences.describe, preferences.hobby, preferences.pet, preferences.petDescription, preferences.religion, preferences.comment, preferences.overallcomment]
             }
         ];
