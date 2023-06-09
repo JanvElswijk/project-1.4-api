@@ -4,6 +4,10 @@ const port = process.env.PORT || 3000;
 
 const userRoutes = require('./routes/user.routes');
 
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+
 app.get('/', (req, res) => {
     //TODO: Add home page
     res.send('Hello World!');

@@ -186,7 +186,7 @@ const userController = {
 
         const queries = [
             {
-                sql: "INSERT INTO user (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Verhuurder')",
+                sql: "INSERT INTO user (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Huurder')",
                 params: [user.emailAddress, user.password, user.dateOfBirth, user.firstName, user.middleName, user.lastName, user.picture, user.gender, user.phoneNumber, user.postalCode, user.street, user.houseNumber, user.city, user.country]
             },
             {
@@ -208,8 +208,11 @@ const userController = {
         });
     },
     createHuurder: (req, res) => {
-        console.log(req.body)
         const { user, preferences } = req.body;
+        user.dateOfBirth = '1999-01-01'
+        preferences.startDate = '2020-01-01'
+        preferences.endDate = '2020-01-01'
+
         user.dateOfBirth = dateConverter(user.dateOfBirth)
         preferences.startDate = dateConverter(preferences.startDate)
         preferences.endDate = dateConverter(preferences.endDate)
@@ -236,11 +239,11 @@ const userController = {
 
         const queries = [
             {
-                sql: "INSERT INTO user (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Verhuurder')",
+                sql: "INSERT INTO user (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Huurder')",
                 params: [user.emailAddress, user.password, user.dateOfBirth, user.firstName, user.middleName, user.lastName, user.picture, user.gender, user.phoneNumber, user.postalCode, user.street, user.houseNumber, user.city, user.country]
             },
             {
-                sql: "INSERT INTO huurder_preferences (userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate, endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment, overallcomment) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                sql: "INSERT INTO seeker_preferences (userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate, endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment, overallcomment) VALUES (LAST_INSERT_ID(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 params: [preferences.seekingCity, preferences.liveWith, preferences.budget, preferences.period, preferences.nights, preferences.pet, preferences.ownPet, preferences.ownPetDescription, preferences.starDate, preferences.endDate, preferences.reason, preferences.schoolFinished, preferences.schoolDoing, preferences.skill, preferences.work, preferences.workDescription, preferences.healthRisk, preferences.healthRiskDescription, preferences.selfDescription, preferences.selfWords, preferences.idealSpace, preferences.offer, preferences.offerYou, preferences.importantNote, preferences.volunteer, preferences.volunteerDescription, preferences.religion, preferences.comment, preferences.overallcomment]
             }
         ];

@@ -98,14 +98,16 @@ const validateUserInput = (user) => {
         assert(user, 'User is required');
         assert(user.emailAddress, 'Email address is required');
         assert(typeof user.emailAddress === 'string', 'Email address is invalid');
-        assert(user.emailAddress.matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/), 'Email address is invalid');
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        assert(emailRegex.test(user.emailAddress), 'Email address is invalid');
         assert(user.password, 'Password is required');
         assert(typeof user.password === 'string', 'Password is invalid');
         // TODO: password regex
         assert(user.dateOfBirth, 'Date of birth is required');
-        assert(user.dateOfBirth.split('-')[0].length === 4, 'Date of birth is invalid');
+        console.log(user.dateOfBirth);
+        assert(user.dateOfBirth.split('-')[0].length === 2, 'Date of birth is invalid');
         assert(user.dateOfBirth.split('-')[1].length === 2, 'Date of birth is invalid');
-        assert(user.dateOfBirth.split('-')[2].length === 2, 'Date of birth is invalid');
+        assert(user.dateOfBirth.split('-')[2].length === 4, 'Date of birth is invalid');
         assert(user.firstName, 'First name is required');
         assert(typeof user.firstName === 'string', 'First name is invalid');
         assert(user.lastName, 'Last name is required');
@@ -130,9 +132,6 @@ const validateUserInput = (user) => {
         assert(typeof user.city === 'string', 'City is invalid');
         assert(user.country, 'Country is required');
         assert(typeof user.country === 'string', 'Country is invalid');
-        assert(user.role, 'Role is required');
-        const roles = ['Huurder', 'Verhuurder'];
-        assert(roles.includes(user.role), 'Role is invalid');
     }
     catch (err) {
         throw new Error(err);
@@ -146,7 +145,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         const situations = ['Alleenstaand', 'Met partner', 'Met huisgenoot', 'Met kinderen', 'Anders'];
         assert(situations.includes(preferences.situation), 'Situation is invalid');
         assert(preferences.house, 'House is required');
-        assert(typeof preferences.house === 'boolean', 'House is invalid');
+        assert(typeof preferences.house === 'number', 'House is invalid');
         assert(preferences.found, 'Found is required');
         assert(typeof preferences.found === 'string', 'Found is invalid');
         assert(preferences.motivation, 'Motivation is required');
@@ -162,7 +161,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(preferences.roomSize, 'Room size is required');
         assert(typeof preferences.roomSize === 'number', 'Room size is invalid');
         assert(preferences.furniture, 'Furniture is required');
-        assert(typeof preferences.furniture === 'boolean', 'Furniture is invalid');
+        assert(typeof preferences.furniture === 'number', 'Furniture is invalid');
         // Check if furniture description is present, if so, check if it's a string and if not, don't check
         if (preferences.furnitureDescription) {
             assert(typeof preferences.furnitureDescription === 'string', 'Furniture description is invalid');
@@ -173,14 +172,15 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(typeof preferences.offer === 'string', 'Offer is invalid');
         assert(preferences.importantNote, 'Important note is required');
         assert(typeof preferences.importantNote === 'string', 'Important note is invalid');
-        assert(preferences.volunteer, 'Volunteer is required');
-        assert(typeof preferences.volunteer === 'boolean', 'Volunteer is invalid');
+        assert(preferences.volunteer === 1 || preferences.volunteer === 0, 'Volunteer is required');
+        assert(typeof preferences.volunteer === 'number', 'Volunteer is invalid');
         // Check if volunteer description is present, if so, check if it's a string and if not, don't check
         if (preferences.volunteerDescription) {
             assert(typeof preferences.volunteerDescription === 'string', 'Volunteer description is invalid');
         }
-        assert(preferences.work, 'Work is required');
-        assert(typeof preferences.work === 'boolean', 'Work is invalid');
+        console.log("Work is: " + preferences.work)
+        assert(preferences.work  === 1 || preferences.work  === 0, 'Work is required');
+        assert(typeof preferences.work === 'number', 'Work is invalid');
         // Check if work description is present, if so, check if it's a string and if not, don't check
         if (preferences.workDescription) {
             assert(typeof preferences.workDescription === 'string', 'Work description is invalid');
@@ -190,7 +190,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         assert(preferences.hobby, 'Hobby is required');
         assert(typeof preferences.hobby === 'string', 'Hobby is invalid');
         assert(preferences.pet, 'Pet is required');
-        assert(typeof preferences.pet === 'boolean', 'Pet is invalid');
+        assert(typeof preferences.pet === 'number', 'Pet is invalid');
         // Check if pet description is present, if so, check if it's a string and if not, don't check
         if (preferences.petDescription) {
             assert(typeof preferences.petDescription === 'string', 'Pet description is invalid');
@@ -228,14 +228,14 @@ const validateHuurderPreferencesInput = (preferences) => {
         assert(preferences.nights, 'Nights is required');
         const nights = ['1', '2', '3', '4', '5', '6', '7'];
         assert(nights.includes(preferences.nights), 'Nights is invalid');
-        assert(preferences.pet, 'Pet is required');
-        assert(typeof preferences.pet === 'boolean', 'Pet is invalid');
+        assert(preferences.pet === 0 || preferences.pet === 1, 'Pet is required');
+        assert(typeof preferences.pet === 'number', 'Pet is invalid');
         // Check if pet description is present, if so, check if it's a string and if not, don't check
         if (preferences.petDescription) {
             assert(typeof preferences.petDescription === 'string', 'Pet description is invalid');
         }
-        assert(preferences.ownPet, 'Own pet is required');
-        assert(typeof preferences.ownPet === 'boolean', 'Own pet is invalid');
+        assert(preferences.ownPet === 1 || preferences.ownPet === 0, 'Own pet is required');
+        assert(typeof preferences.ownPet === 'number', 'Own pet is invalid');
         // Check if own pet description is present, if so, check if it's a string and if not, don't check
         if (preferences.ownPetDescription) {
             assert(typeof preferences.ownPetDescription === 'string', 'Own pet description is invalid');
@@ -259,14 +259,14 @@ const validateHuurderPreferencesInput = (preferences) => {
         if (preferences.skill) {
             assert(typeof preferences.skill === 'string', 'Skill is invalid');
         }
-        assert(preferences.work, 'Work is required');
-        assert(typeof preferences.work === 'boolean', 'Work is invalid');
+        assert(preferences.work  === 0 || preferences.work  === 1, 'Work is required');
+        assert(typeof preferences.work === 'number', 'Work is invalid');
         // Check if work description is present, if so, check if it's a string and if not, don't check
         if (preferences.workDescription) {
             assert(typeof preferences.workDescription === 'string', 'Work description is invalid');
         }
-        assert(preferences.healthRisk, 'Health risk is required');
-        assert(typeof preferences.healthRisk === 'boolean', 'Health risk is invalid');
+        assert(preferences.healthRisk  === 1 || preferences.healthRisk === 0, 'Health risk is required');
+        assert(typeof preferences.healthRisk === 'number', 'Health risk is invalid');
         // Check if health risk description is present, if so, check if it's a string and if not, don't check
         if (preferences.healthRiskDescription) {
             assert(typeof preferences.healthRiskDescription === 'string', 'Health risk description is invalid');
@@ -283,8 +283,8 @@ const validateHuurderPreferencesInput = (preferences) => {
         assert(typeof preferences.offerYou === 'string', 'Offer you is invalid');
         assert(preferences.importantNote, 'Important note is required');
         assert(typeof preferences.importantNote === 'string', 'Important note is invalid');
-        assert(preferences.volunteer, 'Volunteer is required');
-        assert(typeof preferences.volunteer === 'boolean', 'Volunteer is invalid');
+        assert(preferences.volunteer  === 1 || preferences.volunteer === 0, 'Volunteer is required');
+        assert(typeof preferences.volunteer === 'number', 'Volunteer is invalid');
         // Check if volunteer description is present, if so, check if it's a string and if not, don't check
         if (preferences.volunteerDescription) {
             assert(typeof preferences.volunteerDescription === 'string', 'Volunteer description is invalid');
