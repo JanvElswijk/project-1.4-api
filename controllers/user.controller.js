@@ -1,5 +1,5 @@
 const db = require('../util/mysql.db');
-// const dateConverter = require('../util/converter').dateConverter;
+const dateConverter = require('../util/converter').dateConverter;
 const validation = require('../util/validation');
 const bcrypt = require('bcrypt');
 
@@ -211,17 +211,16 @@ const userController = {
         const { user, preferences } = req.body;
         console.log(req.body)
         console.log(user.emailAddress)
-        // console.log(dateConverter(user.password))
-        // user.dateOfBirth = dateConverter(user.dateOfBirth)
-        // // --STAR--DATE
-        // console.log(preferences.starDate)
-        // // --STAR--DATE
-        // console.log(dateConverter(preferences.starDate))
-        // // --STAR--DATE
-        // preferences.starDate = dateConverter(preferences.starDate)
-        // console.log(preferences.endDate)
-        // console.log(dateConverter(preferences.endDate))
-        // preferences.endDate = dateConverter(preferences.endDate)
+        user.dateOfBirth = dateConverter(user.dateOfBirth)
+        // --STAR--DATE
+        console.log(preferences.starDate)
+        // --STAR--DATE
+        console.log(dateConverter(preferences.starDate))
+        // --STAR--DATE
+        preferences.starDate = dateConverter(preferences.starDate)
+        console.log(preferences.endDate)
+        console.log(dateConverter(preferences.endDate))
+        preferences.endDate = dateConverter(preferences.endDate)
 
         user.password = bcrypt.hashSync(user.password, 10);
 
