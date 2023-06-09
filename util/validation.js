@@ -218,7 +218,7 @@ const validateHuurderPreferencesInput = (preferences) => {
         assert(preferences.seekingCity, 'Seeking city is required');
         assert(typeof preferences.seekingCity === 'string', 'Seeking city is invalid');
         assert(preferences.liveWith, 'Live with is required');
-        const liveWith = ['M', 'V', 'K'];
+        const liveWith = ['M', 'V', 'K', ''];
         assert(liveWith.includes(preferences.liveWith), 'Live with is invalid');
         assert(preferences.budget, 'Budget is required');
         assert(typeof preferences.budget === 'string', 'Budget is invalid');
