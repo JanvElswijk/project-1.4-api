@@ -209,12 +209,14 @@ const userController = {
     },
     createHuurder: (req, res) => {
         const { user, preferences } = req.body;
-        user.dateOfBirth = '1999-01-01'
-        preferences.startDate = '2020-01-01'
-        preferences.endDate = '2020-01-01'
-
+        console.log(user.dateOfBirth)
+        console.log(dateConverter(user.dateOfBirth))
         user.dateOfBirth = dateConverter(user.dateOfBirth)
-        preferences.startDate = dateConverter(preferences.startDate)
+        console.log(preferences.starDate)
+        console.log(dateConverter(preferences.starDate))
+        preferences.starDate = dateConverter(preferences.starDate)
+        console.log(preferences.endDate)
+        console.log(dateConverter(preferences.endDate))
         preferences.endDate = dateConverter(preferences.endDate)
 
         user.password = bcrypt.hashSync(user.password, 10);
