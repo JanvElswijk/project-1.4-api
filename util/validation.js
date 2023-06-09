@@ -105,9 +105,9 @@ const validateUserInput = (user) => {
         // TODO: password regex
         assert(user.dateOfBirth, 'Date of birth is required');
         console.log(user.dateOfBirth);
-        assert(user.dateOfBirth.split('-')[0].length === 2, 'Date of birth is invalid');
+        assert(user.dateOfBirth.split('-')[0].length === 4, 'Date of birth is invalid');
         assert(user.dateOfBirth.split('-')[1].length === 2, 'Date of birth is invalid');
-        assert(user.dateOfBirth.split('-')[2].length === 4, 'Date of birth is invalid');
+        assert(user.dateOfBirth.split('-')[2].length === 2, 'Date of birth is invalid');
         assert(user.firstName, 'First name is required');
         assert(typeof user.firstName === 'string', 'First name is invalid');
         assert(user.lastName, 'Last name is required');
