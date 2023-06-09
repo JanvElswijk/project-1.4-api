@@ -121,7 +121,7 @@ const validateUserInput = (user) => {
         assert(user.gender, 'Gender is required')
         assert(genders.includes(user.gender), 'Gender is invalid')
         assert(user.phoneNumber, 'Phone number is required');
-        assert(typeof user.phoneNumber === 'number', 'Phone number is invalid');
+        assert(typeof user.phoneNumber === 'string', 'Phone number is invalid');
         assert(user.postalCode, 'Postal code is required');
         assert(typeof user.postalCode === 'string', 'Postal code is invalid');
         assert(user.street, 'Street is required');
@@ -145,7 +145,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
         const situations = ['Alleenstaand', 'Met partner', 'Met huisgenoot', 'Met kinderen', 'Anders'];
         assert(situations.includes(preferences.situation), 'Situation is invalid');
         assert(preferences.house === 0 || preferences.house === 1, 'House is required');
-        assert(typeof preferences.house === 'number', 'House is invalid');
+        assert(typeof preferences.house === 'string', 'House is invalid');
         assert(preferences.found, 'Found is required');
         assert(typeof preferences.found === 'string', 'Found is invalid');
         assert(preferences.motivation, 'Motivation is required');
@@ -167,7 +167,7 @@ const validateVerhuurderPreferencesInput = (preferences) => {
             assert(typeof preferences.furnitureDescription === 'string', 'Furniture description is invalid');
         }
         assert(preferences.price, 'Price is required');
-        assert(typeof preferences.price === 'number', 'Price is invalid');
+        assert(typeof preferences.price === 'string', 'Price is invalid');
         assert(preferences.offer, 'Offer is required');
         assert(typeof preferences.offer === 'string', 'Offer is invalid');
         assert(preferences.importantNote, 'Important note is required');
@@ -221,7 +221,7 @@ const validateHuurderPreferencesInput = (preferences) => {
         const liveWith = ['M', 'V', 'K', ''];
         assert(liveWith.includes(preferences.liveWith), 'Live with is invalid');
         assert(preferences.budget, 'Budget is required');
-        assert(typeof preferences.budget === 'number', 'Budget is invalid');
+        assert(typeof preferences.budget === 'string', 'Budget is invalid');
         assert(preferences.period, 'Period is required');
         const periods = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
         assert(periods.includes(preferences.period), 'Period is invalid');
