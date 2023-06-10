@@ -279,22 +279,79 @@ const userController = {
         });
     },
     getAllVerhuurders: (req, res) => {
-        const sql = "SELECT * FROM `user` WHERE role = 'Verhuurder'";
-        db.query(sql, (err, result) => {
+        const sql = "SELECT * FROM `user` JOIN `provider_preferences` ON `user`.`id` = `provider_preferences`.`userId` WHERE `user`.`role` = 'Verhuurder'";
+        const query_params = req.query;
+        const query_keys = Object.keys(query_params);
+        const query_values = Object.values(query_params);
+        // If 'describe' is in query_params, replace it with '`describe`'
+        if (query_keys.includes('describe')) {
+            const index = query_keys.indexOf('describe');
+            query_keys[index] = '`describe`';
+        }
+        for (let i = 0; i < query_keys.length; i++) {
+            if (query_values[i] === '') {
+                query_keys.splice(i, 1);
+                query_values.splice(i, 1);
+            }
+        }
+        let query = sql;
+        if (query_keys.length > 0) {
+            query += ' AND ';
+            for (let i = 0; i < query_keys.length; i++) {
+                if (i === query_keys.length - 1) {
+                    query += query_keys[i] + ' = "' + query_values[i] + '"';
+                } else {
+                    query += query_keys[i] + ' = "' + query_values[i] + '" AND ';
+                }
+            }
+        } else {
+            query += ';';
+        }
+
+        console.log("(getAllVerhuurders) query: " + query);
+
+        db.query(query, (err, result) => {
             if (err) {
                 return handleError(err, res);
             } else {
-                console.log("(getAllVerhuurders) result: " + result);
+                console.log("(getAllVerhuurders) result length: " + result.length);
                 res.status(200).json({
                     message: 'Successfully retrieved all verhuurders',
                     data: result
                 });
             }
         });
+
     },
     getAllHuurders: (req, res) => {
-        const sql = "SELECT * FROM user WHERE role = 'Huurder'";
-        db.query(sql, (err, result) => {
+        const sql = "SELECT * FROM `user` JOIN `seeker_preferences` ON `user`.`id` = `seeker_preferences`.`userId` WHERE `user`.`role` = 'Huurder'";
+        const query_params = req.query;
+        const query_keys = Object.keys(query_params);
+        const query_values = Object.values(query_params);
+        // If the one of the keys is empty, remove it from the query
+        for (let i = 0; i < query_keys.length; i++) {
+            if (query_values[i] === '') {
+                query_keys.splice(i, 1);
+                query_values.splice(i, 1);
+            }
+        }
+        let query = sql;
+        if (query_keys.length > 0) {
+            query += ' AND ';
+            for (let i = 0; i < query_keys.length; i++) {
+                if (i === query_keys.length - 1) {
+                    query += query_keys[i] + ' = "' + query_values[i] + '"';
+                } else {
+                    query += query_keys[i] + ' = "' + query_values[i] + '" AND ';
+                }
+            }
+        } else {
+            query += ';';
+        }
+
+        console.log("(getAllHuurders) query: " + query);
+
+        db.query(query, (err, result) => {
             if (err) {
                 return handleError(err, res);
             } else {
