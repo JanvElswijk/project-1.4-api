@@ -6,6 +6,7 @@ const authConfig = require('../config/auth.config');
 const authController = {
     login: (req, res) => {
         const { emailAddress, password } = req.body;
+        console.log(req.body)
 
         const sql = 'SELECT * FROM user WHERE emailAddress = ?';
         const params = [emailAddress];
@@ -16,6 +17,8 @@ const authController = {
             } else {
                 if (rows.length > 0) {
                     if (bcrypt.compareSync(password, rows[0].password)) {
+                        console.log("password match" + rows[0].id)
+                        console.log(password)
                         res.status(200).json(
                             {
                                 token: jwt.sign({ id: rows[0].id, role: rows[0].role }, authConfig.secret),
