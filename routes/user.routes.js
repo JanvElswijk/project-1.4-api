@@ -12,6 +12,9 @@ router.get('/', userController.getAllUsers);
 // Get profile of logged in user, including preferences
 router.get('/profile', authController.validateToken, userController.getProfile);
 
+// Get images of all users
+router.get('/images', userController.getAllProfilePictures);
+
 // Create a new user including preferences in a seperate table (one-to-one relationship) (seperate preferences for "Huurder" and "Verhuurder")
 router.post('/verhuurder', userController.createVerhuurder);
 router.post('/huurder', userController.createHuurder);

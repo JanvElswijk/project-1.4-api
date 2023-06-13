@@ -46,9 +46,34 @@ const validateInput = (user, preferences, role, res) => {
     }
 };
 
+const compareDataHuurder = (huurderData, verhuurderData) => {
+
+}
+
 // User table: id (auto-increment), emailAddress, password, dataOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role (Verhhurder or Huurder)
 // Seeker preferences table: id, userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment,	overallcomment
 // Provider prefernces table: id, userId, situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, describe, hobby, pet, petDescription, religion, comment, overallcomment
+
+// User sql
+
+// CREATE TABLE `user` (
+//     `id` int(11) NOT NULL,
+//     `emailAddress` varchar(255) NOT NULL,
+//     `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `dateOfBirth` date NOT NULL,
+//     `firstName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `middleName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+//     `lastName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `picture` longblob NOT NULL,
+//     `gender` enum('M','F','O') NOT NULL,
+//     `phoneNumber` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `postalCode` varchar(6) NOT NULL,
+//     `street` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `houseNumber` int(11) NOT NULL,
+//     `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `country` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `role` enum('Huurder','Verhuurder') NOT NULL
+// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 // Provider sql
 
@@ -120,6 +145,10 @@ const validateInput = (user, preferences, role, res) => {
 
 
 
+// columns that can be compared between seeker and provider to find a matching percentage, these cannot be simple text without an enum or set
+// seekingCity, budget, period, nights, pet, starDate, endDate, reason, work, volunteer
+
+
 const userController = {
     getAllUsers: (req, res) => {
         db.query('SELECT * FROM user', [], (err, rows) => {
@@ -171,6 +200,45 @@ const userController = {
                         message: 'User not found'
                     });
                 }
+            }
+        });
+    },
+    getAllProfilePictures: (req, res) => {
+        db.query('SELECT id, picture, role FROM user', [], (err, rows) => {
+            if (err) {
+                return handleError(err, res);
+            }
+
+            let counter = 0;
+
+            rows.forEach(row => {
+                if (row.role === 'Verhuurder') {
+                    db.query('SELECT housePicture FROM provider_preferences WHERE userId = ?', [row.id], (err, rows2) => {
+                        if (err) {
+                            return handleError(err, res);
+                        } else {
+                            row.housePicture = rows2[0].housePicture;
+                            counter++;
+
+                            if (counter === rows.length) {
+                                sendResponse();
+                            }
+                        }
+                    });
+                } else {
+                    counter++;
+
+                    if (counter === rows.length) {
+                        sendResponse();
+                    }
+                }
+            });
+
+            function sendResponse() {
+                res.status(200).json({
+                    message: 'Successfully fetched all profile pictures',
+                    data: rows
+                });
             }
         });
     },
@@ -280,32 +348,33 @@ const userController = {
     },
     getAllVerhuurders: (req, res) => {
         const sql = "SELECT * FROM `user` JOIN `provider_preferences` ON `user`.`id` = `provider_preferences`.`userId` WHERE `user`.`role` = 'Verhuurder'";
+
         const query_params = req.query;
         const query_keys = Object.keys(query_params);
         const query_values = Object.values(query_params);
-        // If 'describe' is in query_params, replace it with '`describe`'
-        if (query_keys.includes('describe')) {
-            const index = query_keys.indexOf('describe');
-            query_keys[index] = '`describe`';
-        }
+        // If the one of the keys is empty, remove it from the query
         for (let i = 0; i < query_keys.length; i++) {
             if (query_values[i] === '') {
                 query_keys.splice(i, 1);
                 query_values.splice(i, 1);
             }
         }
+
         let query = sql;
         if (query_keys.length > 0) {
-            query += ' AND ';
+            query += " AND ";
             for (let i = 0; i < query_keys.length; i++) {
-                if (i === query_keys.length - 1) {
-                    query += query_keys[i] + ' = "' + query_values[i] + '"';
+                if (query_keys[i] === 'price') {
+                    query += "price <= " + query_values[i];
+                } else if (query_keys[i] === 'roomSize') {
+                    query += "roomSize >= " + query_values[i];
                 } else {
-                    query += query_keys[i] + ' = "' + query_values[i] + '" AND ';
+                    query += query_keys[i] + " = '" + query_values[i] + "'";
+                }
+                if (i !== query_keys.length - 1) {
+                    query += " AND ";
                 }
             }
-        } else {
-            query += ';';
         }
 
         console.log("(getAllVerhuurders) query: " + query);
@@ -335,18 +404,27 @@ const userController = {
                 query_values.splice(i, 1);
             }
         }
+
+        for (let i = 0; i < query_keys.length; i++) {
+            if (query_keys[i] === 'skill') {
+                query_keys.splice(i, 1);
+                query_values.splice(i, 1);
+            }
+        }
+
         let query = sql;
         if (query_keys.length > 0) {
-            query += ' AND ';
+            query += " AND ";
             for (let i = 0; i < query_keys.length; i++) {
-                if (i === query_keys.length - 1) {
-                    query += query_keys[i] + ' = "' + query_values[i] + '"';
+                if (query_keys[i] === 'EHBO' || query_keys[i] === 'BHV' || query_keys[i] === 'Reanimatie') {
+                    query += "skill LIKE '%" + query_keys[i] + "%'";
                 } else {
-                    query += query_keys[i] + ' = "' + query_values[i] + '" AND ';
+                    query += query_keys[i] + " = '" + query_values[i] + "'";
+                }
+                if (i !== query_keys.length - 1) {
+                    query += " AND ";
                 }
             }
-        } else {
-            query += ';';
         }
 
         console.log("(getAllHuurders) query: " + query);
@@ -366,9 +444,7 @@ const userController = {
     getVerhuurderMatches: (req, res) => {
         //TODO: Make matches
         const id = req.userId
-        res.status(200).json({
-            message: 'NYI: getVerhuurderMatches',
-        });
+
     },
     getHuurderMatches: (req, res) => {
         //TODO: Make matches
