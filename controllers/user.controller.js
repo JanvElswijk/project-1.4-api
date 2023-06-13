@@ -79,7 +79,7 @@ const compareDataHuurder = (huurderData, verhuurdersData) => {
         if (huurderData.pet === verhuurdersData[i].pet) {
             matchingScore += petWeight;
         }
-        matchingScores.push({id: verhuurdersData[i].id, firstName: verhuurdersData[i].firstName, city: verhuurdersData[i].city, dateOfBirth: verhuurdersData[i].dateOfBirth, role: verhuurdersData[i].role, matchingScore: matchingScore});
+        matchingScores.push({data: verhuurdersData[i], matchingScore: matchingScore});
     }
 
     matchingScores.sort((a, b) => {
@@ -122,7 +122,7 @@ const compareDataVerhuurder = (verhuurderData, huurdersData) => {
         if (verhuurderData.pet === huurdersData[i].pet) {
             matchingScore += petWeight;
         }
-        matchingScores.push({id: huurdersData[i].id, firstName: huurdersData[i].firstName, city: huurdersData[i].city, dateOfBirth: huurdersData[i].dateOfBirth, role: huurdersData[i].role, matchingScore: matchingScore});
+        matchingScores.push({data: huurdersData[i], matchingScore: matchingScore});
     }
 
     matchingScores.sort((a, b) => {
