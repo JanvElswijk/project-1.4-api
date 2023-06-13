@@ -46,7 +46,90 @@ const validateInput = (user, preferences, role, res) => {
     }
 };
 
-const compareDataHuurder = (huurderData, verhuurderData) => {
+const compareDataHuurder = (huurderData, verhuurdersData) => {
+    // Compare the following fields:
+    // huurder.seekingCity === verhuurder.city
+    // huurder.budget >= verhuurder.price
+    // huurder.period <= verhuurder.period
+    // huurder.nights <= verhuurder.nights
+    // huurder.pet === verhuurder.pet
+
+    const cityWeight = 15;
+    const budgetWeight = 35;
+    const periodWeight = 20;
+    const nightsWeight = 20;
+    const petWeight = 10;
+
+    const matchingScores = [];
+
+    for (let i = 0; i < verhuurdersData.length; i++) {
+        let matchingScore = 0;
+        if (huurderData.seekingCity === verhuurdersData[i].city) {
+            matchingScore += cityWeight;
+        }
+        if (huurderData.budget >= verhuurdersData[i].price) {
+            matchingScore += budgetWeight;
+        }
+        if (huurderData.period <= verhuurdersData[i].period) {
+            matchingScore += periodWeight;
+        }
+        if (huurderData.nights <= verhuurdersData[i].nights) {
+            matchingScore += nightsWeight;
+        }
+        if (huurderData.pet === verhuurdersData[i].pet) {
+            matchingScore += petWeight;
+        }
+        matchingScores.push({id: verhuurdersData[i].id, firstName: verhuurdersData[i].firstName, city: verhuurdersData[i].city, dateOfBirth: verhuurdersData[i].dateOfBirth, matchingScore: matchingScore});
+    }
+
+    matchingScores.sort((a, b) => {
+        return b.matchingScore - a.matchingScore;
+    });
+
+    return matchingScores;
+
+}
+const compareDataVerhuurder = (verhuurderData, huurdersData) => {
+    // Compare the following fields:
+    // verhuurder.city === huurder.seekingCity
+    // verhuurder.price <= huurder.budget
+    // verhuurder.period >= huurder.period
+    // verhuurder.nights >= huurder.nights
+    // verhuurder.pet === huurder.pet
+
+    const cityWeight = 15;
+    const budgetWeight = 35;
+    const periodWeight = 20;
+    const nightsWeight = 20;
+    const petWeight = 10;
+
+    const matchingScores = [];
+
+    for (let i = 0; i < huurdersData.length; i++) {
+        let matchingScore = 0;
+        if (verhuurderData.city === huurdersData[i].seekingCity) {
+            matchingScore += cityWeight;
+        }
+        if (verhuurderData.price <= huurdersData[i].budget) {
+            matchingScore += budgetWeight;
+        }
+        if (verhuurderData.period >= huurdersData[i].period) {
+            matchingScore += periodWeight;
+        }
+        if (verhuurderData.nights >= huurdersData[i].nights) {
+            matchingScore += nightsWeight;
+        }
+        if (verhuurderData.pet === huurdersData[i].pet) {
+            matchingScore += petWeight;
+        }
+        matchingScores.push({id: huurdersData[i].id, firstName: huurdersData[i].firstName, city: huurdersData[i].city, dateOfBirth: huurdersData[i].dateOfBirth,  matchingScore: matchingScore});
+    }
+
+    matchingScores.sort((a, b) => {
+        return b.matchingScore - a.matchingScore;
+    });
+
+    return matchingScores;
 
 }
 
@@ -442,15 +525,68 @@ const userController = {
         });
     },
     getVerhuurderMatches: (req, res) => {
-        //TODO: Make matches
         const id = req.userId
+        console.log(id)
 
+        db.query("SELECT * FROM user JOIN provider_preferences ON user.id = provider_preferences.userId WHERE user.id = ?", [id], (err, userResult) => {
+            if (err) {
+                return handleError(err, res);
+            }
+
+            if (userResult.length === 0) {
+                console.log("User not found this one 1")
+                return res.status(404).json({
+                    message: 'User not found',
+                });
+            }
+
+            const user = userResult[0];
+
+            db.query("SELECT * FROM user JOIN seeker_preferences ON user.id = seeker_preferences.userId", (err, seekerResult) => {
+                if (err) {
+                    return handleError(err, res);
+                }
+
+                const matches = compareDataVerhuurder(user, seekerResult);
+
+                res.status(200).json({
+                    message: 'Successfully retrieved matches',
+                    data: matches
+                });
+            });
+        });
     },
     getHuurderMatches: (req, res) => {
         //TODO: Make matches
         const id = req.userId
-        res.status(200).json({
-            message: 'NYI: getHuurderMatches',
+        console.log(id)
+
+        db.query("SELECT * FROM user JOIN seeker_preferences ON user.id = seeker_preferences.userId WHERE user.id = ?", [id], (err, userResult) => {
+            if (err) {
+                return handleError(err, res);
+            }
+
+            if (userResult.length === 0) {
+                console.log("User not found this one 1")
+                return res.status(404).json({
+                    message: 'User not found',
+                });
+            }
+
+            const user = userResult[0];
+
+            db.query("SELECT * FROM user JOIN provider_preferences ON user.id = provider_preferences.userId", (err, providerResult) => {
+                if (err) {
+                    return handleError(err, res);
+                }
+
+                const matches = compareDataHuurder(user, providerResult);
+
+                res.status(200).json({
+                    message: 'Successfully retrieved matches',
+                    data: matches
+                });
+            });
         });
     },
     getUserById: (req, res) => {
@@ -556,7 +692,7 @@ const userController = {
             });
         };
 
-        db.query(updateUserQuery, updateUserParams, (err, result) => {
+        db.query(updateUserQuery, updateUserParams, (err) => {
             if (err) {
                 return handleError(err, res);
             }
