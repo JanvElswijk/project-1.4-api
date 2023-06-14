@@ -23,9 +23,9 @@ router.post('/huurder', userController.createHuurder);
 router.get('/verhuurder', userController.getAllVerhuurders); // This can further be filtered using query parameters
 router.get('/huurder', userController.getAllHuurders); // This can further be filtered using query parameters
 
-//TODO: this
-router.post('/verhuurder/match', authController.validateToken, userController.getVerhuurderMatches); // Get all verhuurders that match the preferences of the huurder whose id is in the body and give a percentage of how much they match
-router.post('/huurder/match', authController.validateToken, userController.getHuurderMatches); // Get all huurders that match the preferences of the verhuurder whose id is in the body and give a percentage of how much they match
+// Get all users, including preferences, that match the preferences of the user whose id is in the token
+router.get('/verhuurder/match', authController.validateToken, userController.getVerhuurderMatches); // Get all verhuurders that match the preferences of the huurder whose id is in the body and give a percentage of how much they match
+router.get('/huurder/match', authController.validateToken, userController.getHuurderMatches); // Get all huurders that match the preferences of the verhuurder whose id is in the body and give a percentage of how much they match
 
 // Get a single user, with preferences, check if user is verhuurder or huurder
 router.get('/:id', userController.getUserById);

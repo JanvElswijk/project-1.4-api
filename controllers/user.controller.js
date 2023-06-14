@@ -251,6 +251,7 @@ const userController = {
         });
     },
     getProfile: (req, res) => {
+        console.log("(getProfile) userId: " + req.userId);
         db.query('SELECT * FROM user WHERE id = ?', [req.userId], (err, rows) => {
             if (err) {
                 return handleError(err, res);
