@@ -44,16 +44,17 @@ const authController = {
         const token = req.headers.authorization.split(' ')[1];
         if (!token) {
             res.status(401).json({ error: 'No token provided' });
+        } else {
+            jwt.verify(token, authConfig.secret, (err, decoded) => {
+                if (err) {
+                    res.status(401).json({error: 'Invalid token'});
+                } else {
+                    req.userId = decoded.id;
+                    req.userRole = decoded.role;
+                    next();
+                }
+            });
         }
-        jwt.verify(token, authConfig.secret, (err, decoded) => {
-            if (err) {
-                res.status(401).json({ error: 'Invalid token' });
-            } else {
-                req.userId = decoded.id;
-                req.userRole = decoded.role;
-                next();
-            }
-        });
     }
 };
 
