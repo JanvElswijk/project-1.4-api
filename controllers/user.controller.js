@@ -547,7 +547,43 @@ const userController = {
 
             const user = userResult[0];
 
-            db.query("SELECT * FROM user JOIN seeker_preferences ON user.id = seeker_preferences.userId", (err, seekerResult) => {
+            const sql = "SELECT * FROM `user` JOIN `seeker_preferences` ON `user`.`id` = `seeker_preferences`.`userId` WHERE `user`.`role` = 'Huurder'";
+            const query_params = req.query;
+            const query_keys = Object.keys(query_params);
+            const query_values = Object.values(query_params);
+            // If the one of the keys is empty, remove it from the query
+            for (let i = 0; i < query_keys.length; i++) {
+                if (query_values[i] === '') {
+                    query_keys.splice(i, 1);
+                    query_values.splice(i, 1);
+                }
+            }
+
+            for (let i = 0; i < query_keys.length; i++) {
+                if (query_keys[i] === 'skill') {
+                    query_keys.splice(i, 1);
+                    query_values.splice(i, 1);
+                }
+            }
+
+            let query = sql;
+            if (query_keys.length > 0) {
+                query += " AND ";
+                for (let i = 0; i < query_keys.length; i++) {
+                    if (query_keys[i] === 'EHBO' || query_keys[i] === 'BHV' || query_keys[i] === 'Reanimatie') {
+                        query += "skill LIKE '%" + query_keys[i] + "%'";
+                    } else {
+                        query += query_keys[i] + " = '" + query_values[i] + "'";
+                    }
+                    if (i !== query_keys.length - 1) {
+                        query += " AND ";
+                    }
+                }
+            }
+
+            console.log("(getVerhuurderMatches) query: " + query);
+
+            db.query(query, (err, seekerResult) => {
                 if (err) {
                     return handleError(err, res);
                 }
@@ -562,7 +598,6 @@ const userController = {
         });
     },
     getHuurderMatches: (req, res) => {
-        //TODO: Make matches
         const id = req.userId
         console.log(id)
 
@@ -580,7 +615,39 @@ const userController = {
 
             const user = userResult[0];
 
-            db.query("SELECT * FROM user JOIN provider_preferences ON user.id = provider_preferences.userId", (err, providerResult) => {
+            const sql = "SELECT * FROM `user` JOIN `provider_preferences` ON `user`.`id` = `provider_preferences`.`userId` WHERE `user`.`role` = 'Verhuurder'";
+
+            const query_params = req.query;
+            const query_keys = Object.keys(query_params);
+            const query_values = Object.values(query_params);
+            // If the one of the keys is empty, remove it from the query
+            for (let i = 0; i < query_keys.length; i++) {
+                if (query_values[i] === '') {
+                    query_keys.splice(i, 1);
+                    query_values.splice(i, 1);
+                }
+            }
+
+            let query = sql;
+            if (query_keys.length > 0) {
+                query += " AND ";
+                for (let i = 0; i < query_keys.length; i++) {
+                    if (query_keys[i] === 'price') {
+                        query += "price <= " + query_values[i];
+                    } else if (query_keys[i] === 'roomSize') {
+                        query += "roomSize >= " + query_values[i];
+                    } else {
+                        query += query_keys[i] + " = '" + query_values[i] + "'";
+                    }
+                    if (i !== query_keys.length - 1) {
+                        query += " AND ";
+                    }
+                }
+            }
+
+            console.log("(getHuurderMatches) query: " + query);
+
+            db.query(query, (err, providerResult) => {
                 if (err) {
                     return handleError(err, res);
                 }
