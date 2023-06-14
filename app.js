@@ -11,12 +11,12 @@ app.use(bodyParser.json({ limit: '50mb' }));
 
 app.get('/', (req, res) => {
     //TODO: Add home page
-    res.send('Hello World!');
+    return res.send('Hello World!');
 });
 
 app.get('/about', (req, res) => {
     //TODO: Add about page
-    res.send('About page');
+    return res.send('About page');
 });
 
 app.use('/api/user', userRoutes);

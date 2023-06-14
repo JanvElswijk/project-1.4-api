@@ -13,13 +13,13 @@ const authController = {
 
         db.query(sql, params, (err, rows) => {
             if (err) {
-                res.status(500).json({ error: err });
+                return res.status(500).json({ error: err });
             } else {
                 if (rows.length > 0) {
                     if (bcrypt.compareSync(password, rows[0].password)) {
                         console.log("password match" + rows[0].id)
                         console.log(password)
-                        res.status(200).json(
+                        return res.status(200).json(
                             {
                                 token: jwt.sign({ id: rows[0].id, role: rows[0].role }, authConfig.secret),
                                 user: {
@@ -32,10 +32,10 @@ const authController = {
                             }
                         );
                     } else {
-                        res.status(403).json({ error: "Password doesn't match"});
+                        return res.status(403).json({ error: "Password doesn't match"});
                     }
                 } else {
-                    res.status(401).json({ error: 'Invalid username or password' });
+                    return res.status(401).json({ error: 'Invalid username or password' });
                 }
             }
         });
@@ -45,11 +45,11 @@ const authController = {
         console.log(req.headers.authorization);
         const token = req.headers.authorization.split(' ')[1];
         if (!token) {
-            res.status(401).json({ error: 'No token provided' });
+            return res.status(401).json({ error: 'No token provided' });
         } else {
             jwt.verify(token, authConfig.secret, (err, decoded) => {
                 if (err) {
-                    res.status(401).json({error: 'Invalid token'});
+                    return res.status(401).json({error: 'Invalid token'});
                 } else {
                     req.userId = decoded.id;
                     req.userRole = decoded.role;

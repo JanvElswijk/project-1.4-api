@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 
 const handleError = (err, res) => {
     console.log(err);
-    res.status(500).json({
+    return res.status(500).json({
         message: 'Something went wrong',
         error: err
     });
@@ -244,7 +244,7 @@ const userController = {
                 return handleError(err, res);
             }
 
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Successfully fetched all users',
                 data: rows
             });
@@ -263,7 +263,7 @@ const userController = {
                                 return handleError(err, res);
                             } else {
                                 console.log("(getProfile) amount of rows: " + rows.length);
-                                res.status(200).json({
+                                return res.status(200).json({
                                     message: 'Successfully fetched profile',
                                     user: rows[0],
                                     preferences: rows2[0]
@@ -276,7 +276,7 @@ const userController = {
                                 return handleError(err, res);
                             } else {
                                 console.log("(getProfile) amount of rows: " + rows.length);
-                                res.status(200).json({
+                                return res.status(200).json({
                                     message: 'Successfully fetched profile',
                                     user: rows[0],
                                     preferences: rows2[0]
@@ -285,7 +285,7 @@ const userController = {
                         });
                     }
                 } else {
-                    res.status(404).json({
+                    return res.status(404).json({
                         message: 'User not found'
                     });
                 }
@@ -324,7 +324,7 @@ const userController = {
             });
 
             function sendResponse() {
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully fetched all profile pictures',
                     data: rows
                 });
@@ -363,7 +363,7 @@ const userController = {
                 return handleError(err, res);
             } else {
                 console.log("(createVerhuurder) result: " + result);
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully created verhuurder',
                     data: result
                 });
@@ -396,7 +396,7 @@ const userController = {
 
         validation.validateUserInput(user, (err) => {
             if (err) {
-                res.status(400).json({
+                return res.status(400).json({
                     message: 'Invalid user input',
                     error: err
                 });
@@ -405,7 +405,7 @@ const userController = {
 
         validation.validateHuurderPreferencesInput(preferences, (err) => {
             if (err) {
-                res.status(400).json({
+                return res.status(400).json({
                     message: 'Invalid preferences input',
                     error: err
                 });
@@ -428,7 +428,7 @@ const userController = {
                 return handleError(err, res);
             } else {
                 console.log("(createHuurder) result length: " + result.length);
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully created huurder',
                     data: result
                 });
@@ -473,7 +473,7 @@ const userController = {
                 return handleError(err, res);
             } else {
                 console.log("(getAllVerhuurders) result length: " + result.length);
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully retrieved all verhuurders',
                     data: result
                 });
@@ -523,7 +523,7 @@ const userController = {
                 return handleError(err, res);
             } else {
                 console.log("(getAllHuurders) result length: " + result.length);
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully retrieved all huurders',
                     data: result
                 });
@@ -591,7 +591,7 @@ const userController = {
 
                 const matches = compareDataVerhuurder(user, seekerResult);
 
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully retrieved matches',
                     data: matches
                 });
@@ -655,7 +655,7 @@ const userController = {
 
                 const matches = compareDataHuurder(user, providerResult);
 
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully retrieved matches',
                     data: matches
                 });
@@ -683,7 +683,7 @@ const userController = {
 
                         const {password, ...sanitizedUser} = userResult[0]
 
-                        res.status(200).json({
+                        return res.status(200).json({
                             message: 'Successfully retrieved user',
                             data: {
                                 user: sanitizedUser,
@@ -700,7 +700,7 @@ const userController = {
 
                         const {password, ...sanitizedUser} = userResult[0]
 
-                        res.status(200).json({
+                        return res.status(200).json({
                             message: 'Successfully retrieved user',
                             data: {
                                 user: sanitizedUser,
@@ -710,10 +710,9 @@ const userController = {
                     });
                     break;
                 default:
-                    res.status(400).json({
+                    return res.status(400).json({
                         message: 'Invalid role'
                     });
-                    break;
             }
         });
     },
@@ -759,7 +758,7 @@ const userController = {
                 ];
 
         const handleUpdateSuccess = (result) => {
-            res.status(200).json({
+            return res.status(200).json({
                 message: 'Successfully updated user',
                 data: result
             });
@@ -785,7 +784,7 @@ const userController = {
                 return handleError(err, res);
             } else {
                 console.log("(deleteUser) result length: " + result.length);
-                res.status(200).json({
+                return res.status(200).json({
                     message: 'Successfully deleted user',
                     data: result
                 });
