@@ -271,7 +271,7 @@ const userController = {
                             }
                         });
                     } else if (rows[0].role === 'Verhuurder') {
-                        db.query('SELECT * FROM verhuurder_preferences WHERE userId = ?', [req.userId], (err, rows2) => {
+                        db.query('SELECT * FROM provider_preferences WHERE userId = ?', [req.userId], (err, rows2) => {
                             if (err) {
                                 return handleError(err, res);
                             } else {
