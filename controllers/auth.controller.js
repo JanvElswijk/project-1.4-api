@@ -47,12 +47,15 @@ const authController = {
         console.log(req.headers.authorization);
         const token = req.headers.authorization.split(' ')[1];
         if (!token) {
+            console.log("no token")
             return res.status(401).json({ error: 'No token provided' });
         } else {
             jwt.verify(token, authConfig.secret, (err, decoded) => {
                 if (err) {
+                    console.log("invalid token")
                     return res.status(401).json({error: 'Invalid token'});
                 } else {
+                    console.log("valid token")
                     req.userId = decoded.id;
                     req.userRole = decoded.role;
                     next();

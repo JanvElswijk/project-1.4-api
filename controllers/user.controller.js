@@ -746,12 +746,14 @@ const userController = {
         });
     },
     updateUser: (req, res) => {
+        console.log("(updateUser) called")
         const { user, preferences } = req.body;
         const linkUserId = req.params.id;
         const role = req.userRole;
         const userId = req.userId;
 
         if (userId !== linkUserId) {
+            console.log("(updateUser) Unauthorized")
             return res.status(401).json({
                 message: 'Unauthorized'
             });
@@ -789,6 +791,7 @@ const userController = {
                 ];
 
         const handleUpdateSuccess = (result) => {
+            console.log("(updateUser) Successfully updated user")
             return res.status(200).json({
                 message: 'Successfully updated user',
                 data: result
@@ -796,11 +799,15 @@ const userController = {
         };
 
         db.query(updateUserQuery, updateUserParams, (err) => {
+            console.log("(updateUser) updateUserQuery called")
             if (err) {
+                console.log("(updateUser) updateUserQuery error")
                 return handleError(err, res);
             }
             db.query(updatePreferencesQuery, updatePreferencesParams, (err, result) => {
+                console.log("(updateUser) updatePreferencesQuery called")
                 if (err) {
+                    console.log("(updateUser) updatePreferencesQuery error")
                     return handleError(err, res);
                 }
 
