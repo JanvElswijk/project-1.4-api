@@ -15,7 +15,7 @@ const authController = {
             if (err) {
                 return res.status(500).json({ error: err });
             } else {
-                if (rows.length > 0) {
+                if (rows.length > 0 && rows[0].isActive === 1) {
                     if (bcrypt.compareSync(password, rows[0].password)) {
                         console.log("password match" + rows[0].id)
                         console.log(password)
@@ -34,6 +34,8 @@ const authController = {
                     } else {
                         return res.status(403).json({ error: "Password doesn't match"});
                     }
+                } else if (rows.length > 0 && rows[0].isActive === 0) {
+                    return res.status(403).json({ error: 'Email not verified' });
                 } else {
                     return res.status(401).json({ error: 'Invalid username or password' });
                 }
@@ -57,6 +59,25 @@ const authController = {
                 }
             });
         }
+    },
+    verifyEmail: (req, res) => {
+        const encodedEmail = req.params.encodedEmail;
+        const decodedEmail = Buffer.from(encodedEmail, 'base64').toString('ascii');
+
+        const sql = 'UPDATE user SET isActive = 1 WHERE emailAddress = ?';
+        const params = [decodedEmail];
+
+        db.query(sql, params, (err, rows) => {
+            if (err) {
+                return res.status(500).json({ error: err });
+            } else {
+                if (rows.affectedRows > 0) {
+                    return res.status(200).json({ message: 'Email verified' });
+                } else {
+                    return res.status(404).json({ error: 'Email not found' });
+                }
+            }
+        });
     }
 };
 

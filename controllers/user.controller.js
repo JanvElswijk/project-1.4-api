@@ -2,6 +2,7 @@ const db = require('../util/mysql.db');
 const dateConverter = require('../util/converter').dateConverter;
 const validation = require('../util/validation');
 const bcrypt = require('bcrypt');
+const mailer = require('../util/mailer');
 
 const handleError = (err, res) => {
     console.log(err);
@@ -10,7 +11,6 @@ const handleError = (err, res) => {
         error: err
     });
 };
-
 const validateInput = (user, preferences, role, res) => {
     validation.validateUserInput(user, (err) => {
         if (err) {
@@ -45,7 +45,6 @@ const validateInput = (user, preferences, role, res) => {
         });
     }
 };
-
 const compareDataHuurder = (huurderData, verhuurdersData) => {
     // Compare the following fields:
     // huurder.seekingCity === verhuurder.city
@@ -332,8 +331,14 @@ const userController = {
         });
     },
     createVerhuurder: (req, res) => {
-        const { user, preferences } = req.body;
-
+        let user, preferences;
+        if (req.body.user && req.body.preferences) {
+            ({ user, preferences } = req.body);
+        } else {
+            return res.status(400).json({
+                message: 'Bad request'
+            });
+        }
 
         preferences.house = preferences.house === 'Nee' ? 0 : 1;
         preferences.furniture = preferences.furniture === 'Nee' ? 0 : 1;
@@ -363,6 +368,14 @@ const userController = {
                 return handleError(err, res);
             } else {
                 console.log("(createVerhuurder) result: " + result);
+                const userId = result[0].id;
+                mailer.sendMail(user.emailAddress, userId,(err, info) => {
+                    if (err) {
+                        return handleError(err, res);
+                    } else {
+                        console.log("(createVerhuurder) info: " + info);
+                    }
+                });
                 return res.status(200).json({
                     message: 'Successfully created verhuurder',
                     data: result
@@ -371,9 +384,17 @@ const userController = {
         });
     },
     createHuurder: (req, res) => {
-        const { user, preferences } = req.body;
-        console.log(req.body)
-        console.log(user.emailAddress)
+        let user, preferences;
+        if (req.body.user && req.body.preferences) {
+            ({ user, preferences } = req.body);
+        } else {
+            return res.status(400).json({
+                message: 'Bad request'
+            });
+        }
+
+        console.log(user.dateOfBirth)
+
         user.dateOfBirth = dateConverter(user.dateOfBirth)
         // --STAR--DATE
         console.log(preferences.starDate)
@@ -428,6 +449,14 @@ const userController = {
                 return handleError(err, res);
             } else {
                 console.log("(createHuurder) result length: " + result.length);
+                const userId = result[0].id;
+                mailer.sendMail(user.emailAddress, userId, (err, info) => {
+                    if (err) {
+                        return handleError(err, res);
+                    } else {
+                        console.log("(createVerhuurder) info: " + info);
+                    }
+                });
                 return res.status(200).json({
                     message: 'Successfully created huurder',
                     data: result
@@ -718,11 +747,13 @@ const userController = {
     },
     updateUser: (req, res) => {
         const { user, preferences } = req.body;
-        const { role, userId } = req;
+        const linkUserId = req.params.id;
+        const role = req.userRole;
+        const userId = req.userId;
 
-        if (role !== 'Verhuurder' && role !== 'Huurder') {
-            return res.status(400).json({
-                message: 'Invalid role'
+        if (userId !== linkUserId) {
+            return res.status(401).json({
+                message: 'Unauthorized'
             });
         }
 
