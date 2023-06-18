@@ -759,6 +759,19 @@ const userController = {
             });
         }
 
+        validateInput(user, preferences, role, (err, result) => {
+            if (err) {
+                return handleError(err, res);
+            }
+
+            if (!result) {
+                return res.status(400).json({
+                    message: 'Invalid input'
+                });
+            }
+        });
+
+
         const updateUserQuery = "UPDATE user SET emailAddress = ?, password = ?, firstName = ?, middleName = ?, lastName = ?, gender = ? ,phoneNumber = ?, street = ?, city = ?, postalCode = ?, country = ?, houseNumber = ? WHERE id = ?";
         const updatePreferencesQuery =
             role === 'Verhuurder'
