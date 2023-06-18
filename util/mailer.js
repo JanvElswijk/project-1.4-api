@@ -13,8 +13,9 @@ const sendMail = (reciever, callback) => {
         from: config.auth.user,
         to: reciever,
         subject: 'Email-verificatie MijnWoongenoot',
-        html: `<p>Please click the link below to verify your account:</p>
-         <a href="${verifyLink}">${verifyLink}</a>`,
+        html: `<p>Klik op de link hieronder om uw account te verifieren:</p>
+         <a href="${verifyLink}">${verifyLink}</a>
+         <p>Staandaard staat uw telefoonnummer op prive, dit is aan te passen binnen de instellingen in de app</p>`,
     }
 
     transporter.sendMail(mailOptions, (err, info) => {

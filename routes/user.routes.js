@@ -18,6 +18,9 @@ router.get('/profile', authController.validateToken, userController.getProfile);
 // Get images of all users
 router.get('/images', userController.getAllProfilePictures);
 
+// Change phone number visibility
+router.put('/profile/phone', authController.validateToken, userController.changePhoneVisibility);
+
 // Create a new user including preferences in a seperate table (one-to-one relationship) (seperate preferences for "Huurder" and "Verhuurder")
 router.post('/verhuurder', userController.createVerhuurder);
 router.post('/huurder', userController.createHuurder);

@@ -330,6 +330,17 @@ const userController = {
             }
         });
     },
+    changePhoneVisibility: (req, res) => {
+        db.query('UPDATE user SET phoneNumberVisible = ? WHERE id = ?', [req.body.phoneNumberVisible, req.userId], (err) => {
+            if (err) {
+                return handleError(err, res);
+            }
+
+            return res.status(200).json({
+                message: 'Successfully changed phone number visibility'
+            });
+        });
+    },
     createVerhuurder: (req, res) => {
         let user, preferences;
         if (req.body.user && req.body.preferences) {
@@ -354,7 +365,7 @@ const userController = {
 
         const queries = [
             {
-                sql: "INSERT INTO `user` (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Verhuurder')",
+                sql: "INSERT INTO `user` (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role, isActive. phoneNumberVisible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Verhuurder', 0, 0)",
                 params: [user.emailAddress, user.password, user.dateOfBirth, user.firstName, user.middleName, user.lastName, user.picture, user.gender, user.phoneNumber, user.postalCode, user.street, user.houseNumber, user.city, user.country]
             },
             {
@@ -435,7 +446,7 @@ const userController = {
 
         const queries = [
             {
-                sql: "INSERT INTO `user` (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Huurder')",
+                sql: "INSERT INTO `user` (emailAddress, password, dateOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role, isActive, phoneNumberVisible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Huurder', 0, 0)",
                 params: [user.emailAddress, user.password, user.dateOfBirth, user.firstName, user.middleName, user.lastName, user.picture, user.gender, user.phoneNumber, user.postalCode, user.street, user.houseNumber, user.city, user.country]
             },
             {// --STAR--DATE// --STAR--DATE// --STAR--DATE// --STAR--DATE// --STAR--DATE
