@@ -765,6 +765,28 @@ const userController = {
 
         user.password = bcrypt.hashSync(user.password, 10);
 
+
+        switch (role) {
+            case 'Verhuurder':
+                preferences.house = preferences.house === 'Nee' ? 0 : 1;
+                preferences.furniture = preferences.furniture === 'Nee' ? 0 : 1;
+                preferences.volunteer = preferences.volunteer === 'Nee' ? 0 : 1;
+                preferences.work = preferences.work === 'Nee' ? 0 : 1;
+                preferences.pet = preferences.pet === 'Nee' ? 0 : 1;
+                break;
+            case 'Huurder':
+                preferences.pet = preferences.pet === 'Nee' ? 0 : 1;
+                preferences.ownPet = preferences.ownPet === 'Nee' ? 0 : 1;
+                preferences.work = preferences.work === 'Nee' ? 0 : 1;
+                preferences.healthRisk = preferences.healthRisk === 'Nee' ? 0 : 1;
+                preferences.volunteer = preferences.volunteer === 'Nee' ? 0 : 1;
+                break;
+            default:
+                return res.status(400).json({
+                    message: 'Invalid role'
+                });
+        }
+
         validateInput(user, preferences, role, (err, result) => {
             if (err) {
                 return handleError(err, res);
