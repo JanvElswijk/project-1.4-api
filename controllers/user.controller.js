@@ -763,6 +763,8 @@ const userController = {
         preferences.starDate = dateConverter(preferences.starDate)
         preferences.endDate = dateConverter(preferences.endDate)
 
+        user.password = bcrypt.hashSync(user.password, 10);
+
         validateInput(user, preferences, role, (err, result) => {
             if (err) {
                 return handleError(err, res);
