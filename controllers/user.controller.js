@@ -759,15 +759,15 @@ const userController = {
             });
         }
 
-        const updateUserQuery = "UPDATE user SET emailAddress = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
+        const updateUserQuery = "UPDATE user SET emailAddress = ?, password = ?, firstName = ?, middleName = ?, lastName = ?, gender = ? ,phoneNumber = ?, street = ?, city = ?, postalCode = ?, country = ?, houseNumber = ? WHERE id = ?";
         const updatePreferencesQuery =
             role === 'Verhuurder'
-                ? "UPDATE provider_preferences SET situation = ?, house = ?, found = ?, motivation = ?, housePicture = ?, period = ?, nights = ?, roomType = ?, roomSize = ?, furniture = ?, furnitureDescription = ?, price = ?, offer = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, work = ?, workDescription = ?, describe = ?, hobby = ?, pet = ?, petDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?"
+                ? "UPDATE provider_preferences SET situation = ?, house = ?, found = ?, motivation = ?, housePicture = ?, period = ?, nights = ?, roomType = ?, roomSize = ?, furniture = ?, furnitureDescription = ?, price = ?, offer = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, work = ?, workDescription = ?, `describe` = ?, hobby = ?, pet = ?, petDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?"
                 : "UPDATE seeker_preferences SET seekingCity = ?, liveWith = ?, budget = ?, period = ?, nights = ?, pet = ?, ownPet = ?, ownPetDescription = ?, starDate = ?, endDate = ?, reason = ?, schoolFinished = ?, schoolDoing = ?, skill = ?, work = ?, workDescription = ?, healthRisk = ?, healthRiskDescription = ?, selfDescription = ?, selfWords = ?, idealSpace = ?, offer = ?, offerYou = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?";
 
         const updateUserParams = [
-            user.emailAddress, user.password, user.firstName, user.lastName, user.phoneNumber, user.address,
-            user.city, user.postalCode, user.country, userId
+            user.emailAddress, user.password, user.firstName, user.middleName, user.lastName, user.gender, user.phoneNumber, user.street,
+            user.city, user.postalCode, user.country, user.houseNumber, userId
         ];
         const updatePreferencesParams =
             role === 'Verhuurder'
