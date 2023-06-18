@@ -766,7 +766,7 @@ const userController = {
                 : "UPDATE seeker_preferences SET seekingCity = ?, liveWith = ?, budget = ?, period = ?, nights = ?, pet = ?, ownPet = ?, ownPetDescription = ?, starDate = ?, endDate = ?, reason = ?, schoolFinished = ?, schoolDoing = ?, skill = ?, work = ?, workDescription = ?, healthRisk = ?, healthRiskDescription = ?, selfDescription = ?, selfWords = ?, idealSpace = ?, offer = ?, offerYou = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?";
 
         const updateUserParams = [
-            user.email, user.password, user.firstName, user.lastName, user.phoneNumber, user.address,
+            user.emailAddress, user.password, user.firstName, user.lastName, user.phoneNumber, user.address,
             user.city, user.postalCode, user.country, userId
         ];
         const updatePreferencesParams =
