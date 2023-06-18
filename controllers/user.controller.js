@@ -759,6 +759,10 @@ const userController = {
             });
         }
 
+        user.dateOfBirth = dateConverter(user.dateOfBirth)
+        preferences.starDate = dateConverter(preferences.starDate)
+        preferences.endDate = dateConverter(preferences.endDate)
+
         validateInput(user, preferences, role, (err, result) => {
             if (err) {
                 return handleError(err, res);
