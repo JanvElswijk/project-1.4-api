@@ -759,7 +759,7 @@ const userController = {
             });
         }
 
-        const updateUserQuery = "UPDATE user SET email = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
+        const updateUserQuery = "UPDATE user SET emailAddress = ?, password = ?, firstName = ?, lastName = ?, phoneNumber = ?, address = ?, city = ?, postalCode = ?, country = ? WHERE id = ?";
         const updatePreferencesQuery =
             role === 'Verhuurder'
                 ? "UPDATE provider_preferences SET situation = ?, house = ?, found = ?, motivation = ?, housePicture = ?, period = ?, nights = ?, roomType = ?, roomSize = ?, furniture = ?, furnitureDescription = ?, price = ?, offer = ?, importantNote = ?, volunteer = ?, volunteerDescription = ?, work = ?, workDescription = ?, describe = ?, hobby = ?, pet = ?, petDescription = ?, religion = ?, comment = ?, overallcomment = ? WHERE userId = ?"
