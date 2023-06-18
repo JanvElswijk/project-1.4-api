@@ -748,7 +748,7 @@ const userController = {
     updateUser: (req, res) => {
         console.log("(updateUser) called")
         const { user, preferences } = req.body;
-        const linkUserId = req.params.id;
+        const linkUserId = parseInt(req.params.id);
         const role = req.userRole;
         const userId = req.userId;
 
