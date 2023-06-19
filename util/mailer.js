@@ -7,7 +7,8 @@ const sendMail = (reciever, callback) => {
 
     const linkHash = Buffer.from(reciever).toString('base64');
 
-    const verifyLink = `http://localhost:3000/api/user/verify/${linkHash}`;
+    // const verifiyLink = `http://localhost:3000/api/user/verify/${linkHash}`;
+    const verifyLink = `https://hardy-stream-production.up.railway.app/api/user/verify/${linkHash}`;
 
     const mailOptions = {
         from: config.auth.user,

@@ -771,9 +771,6 @@ const userController = {
         }
 
         user.dateOfBirth = dateConverter(user.dateOfBirth)
-        // Hier error, miss iets met de input
-        preferences.starDate = dateConverter(preferences.starDate)
-        preferences.endDate = dateConverter(preferences.endDate)
 
         user.password = bcrypt.hashSync(user.password, 10);
 
@@ -792,6 +789,8 @@ const userController = {
                 preferences.work = preferences.work === 'Nee' || 'No' ? 0 : 1;
                 preferences.healthRisk = preferences.healthRisk === 'Nee' || 'No' ? 0 : 1;
                 preferences.volunteer = preferences.volunteer === 'Nee' || 'No' ? 0 : 1;
+                preferences.starDate = dateConverter(preferences.starDate)
+                preferences.endDate = dateConverter(preferences.endDate)
                 break;
             default:
                 return res.status(400).json({
