@@ -49,7 +49,7 @@ jobs:
           npm test -- --DB_PASSWORD {{env.MYSQL_ROOT_PASSWORD}} --DB_USER root --DB_NAME ${{env.DB_DATABASE}}
 
   Railway-deploy:
-    needs: hello_world_job
+    needs: Mocha-tests
     runs-on: ubuntu-latest
     environment:
       name: Railway # naam van mijn environment op GitHub
