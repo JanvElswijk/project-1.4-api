@@ -34,6 +34,7 @@ jobs:
         run: |
           mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} < mijnwoongenoot.sql
           mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} -e "SHOW TABLES;"
+          mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} -e "SELECT id, firstName FROM users;"
 
       - name: npm install
         run: |
