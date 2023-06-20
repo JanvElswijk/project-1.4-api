@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2023 at 02:18 PM
+-- Generation Time: Jun 20, 2023 at 11:18 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `adsfasd`
+-- Database: `mijnwoongenoot`
 --
 
 -- --------------------------------------------------------
@@ -34,7 +34,7 @@ CREATE TABLE `provider_preferences` (
   `house` tinyint(1) NOT NULL,
   `found` text NOT NULL,
   `motivation` text NOT NULL,
-  `housePicture` mediumblob DEFAULT NULL,
+  `housePicture` text DEFAULT NULL,
   `period` enum('1','2','3','4','5','6','7','8','9','\r\n\r\n10','11') NOT NULL,
   `nights` enum('1','2','3','4','5','6','7') NOT NULL,
   `roomType` text NOT NULL,
@@ -215,19 +215,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `provider_preferences`
 --
 ALTER TABLE `provider_preferences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `seeker_preferences`
 --
 ALTER TABLE `seeker_preferences`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
 
 --
 -- Constraints for dumped tables
