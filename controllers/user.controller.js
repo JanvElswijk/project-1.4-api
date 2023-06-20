@@ -5,7 +5,7 @@ const bcrypt = require('bcrypt');
 const mailer = require('../util/mailer');
 
 const handleError = (err, res) => {
-    console.log(err);
+    // console.log(err);
     return res.status(500).json({
         message: 'Something went wrong',
         error: err
@@ -137,86 +137,90 @@ const compareDataVerhuurder = (verhuurderData, huurdersData) => {
 
 }
 
-// User table: id (auto-increment), emailAddress, password, dataOfBirth, firstName, middleName, lastName, picture, gender, phoneNumber, postalCode, street, houseNumber, city, country, role (Verhhurder or Huurder)
-// Seeker preferences table: id, userId, seekingCity, liveWith, budget, period, nights, pet, ownPet, ownPetDescription, starDate endDate, reason, schoolFinished, schoolDoing, skill, work, workDescription, healthRisk, healthRiskDescription, selfDescription, selfWords, idealSpace, offer, offerYou, importantNote, volunteer, volunteerDescription, religion, comment,	overallcomment
-// Provider prefernces table: id, userId, situation, house, found, motivation, housePicture, period, nights, roomType, roomSize, furniture, furnitureDescription, price, offer, importantNote, volunteer, volunteerDescription, work, workDescription, describe, hobby, pet, petDescription, religion, comment, overallcomment
-
 // User sql
 
 // CREATE TABLE `user` (
-//     `id` int(11) NOT NULL,
+//     `id` int NOT NULL AUTO_INCREMENT,
 //     `emailAddress` varchar(255) NOT NULL,
-//     `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `password` varchar(255) NOT NULL,
 //     `dateOfBirth` date NOT NULL,
-//     `firstName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-//     `middleName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-//     `lastName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-//     `picture` longblob NOT NULL,
+//     `firstName` varchar(255) NOT NULL,
+//     `middleName` varchar(255) DEFAULT NULL,
+//     `lastName` varchar(255) NOT NULL,
+//     `picture` varchar(255) NOT NULL,
 //     `gender` enum('M','F','O') NOT NULL,
-//     `phoneNumber` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+//     `phoneNumber` varchar(10) NOT NULL,
 //     `postalCode` varchar(6) NOT NULL,
-//     `street` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-//     `houseNumber` int(11) NOT NULL,
-//     `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-//     `country` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-//     `role` enum('Huurder','Verhuurder') NOT NULL
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+//     `street` varchar(255) NOT NULL,
+//     `houseNumber` int NOT NULL,
+//     `city` varchar(255) NOT NULL,
+//     `country` varchar(255) NOT NULL,
+//     `role` enum('Huurder','Verhuurder') NOT NULL,
+//     `isActive` tinyint(1) DEFAULT NULL,
+//     `phoneNumberVisible` tinyint(1) DEFAULT NULL,
+//     PRIMARY KEY (id),
+//     UNIQUE KEY emailAddress (emailAddress)
+// ) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4;;
 
 // Provider sql
 
 // CREATE TABLE `provider_preferences` (
-//     `id` int(11) NOT NULL,
-//     `userId` int(11) NOT NULL,
+//     `id` int NOT NULL AUTO_INCREMENT,
+//     `userId` int NOT NULL,
 //     `situation` enum('Alleenstaand','Met partner','Met huisgenoot','Met kinderen','Anders') NOT NULL,
 //     `house` tinyint(1) NOT NULL,
 //     `found` text NOT NULL,
 //     `motivation` text NOT NULL,
-//     `housePicture` longblob DEFAULT NULL,
+//     `housePicture` longblob,
 //     `period` enum('1','2','3','4','5','6','7','8','9','10','11') NOT NULL,
 //     `nights` enum('1','2','3','4','5','6','7') NOT NULL,
 //     `roomType` text NOT NULL,
-//     `roomSize` int(11) NOT NULL,
+//     `roomSize` int NOT NULL,
 //     `furniture` tinyint(1) NOT NULL,
-//     `furnitureDescription` text DEFAULT NULL,
-//     `price` int(11) NOT NULL,
+//     `furnitureDescription` text,
+//     `price` int NOT NULL,
 //     `offer` text NOT NULL,
 //     `importantNote` text NOT NULL,
 //     `volunteer` tinyint(1) NOT NULL,
-//     `volunteerDescription` text DEFAULT NULL,
+//     `volunteerDescription` text,
 //     `work` tinyint(1) NOT NULL,
-//     `workDescription` text DEFAULT NULL,
+//     `workDescription` text,
 //     `describe` text NOT NULL,
 //     `hobby` text NOT NULL,
 //     `pet` tinyint(1) NOT NULL,
-//     `petDescription` text DEFAULT NULL,
-//     `religion` text DEFAULT NULL,
-//     `comment` text DEFAULT NULL,
-//     `overallcomment` text DEFAULT NULL
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+//     `petDescription` text,
+//     `religion` text,
+//     `comment` text,
+//     `overallcomment` text,
+//     PRIMARY KEY (id),
+//     KEY FK_provider_preferences_userId (userId),
+//     CONSTRAINT FK_provider_preferences_userId FOREIGN KEY (userId) REFERENCES user (id) ON DELETE CASCADE
+// ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4;
+
 
 // Seeker sql
 
-// CREATE TABLE `seeker_preferences` (
-//     `id` int(11) NOT NULL,
-//     `userId` int(11) NOT NULL,
+// CREATE TABLE seeker_preferences (
+//     `id` int NOT NULL AUTO_INCREMENT,
+//     `userId` int NOT NULL,
 //     `seekingCity` varchar(255) NOT NULL,
 //     `liveWith` enum('M','V','K') DEFAULT NULL,
-//     `budget` int(11) NOT NULL,
+//     `budget` int NOT NULL,
 //     `period` enum('1','2','3','4','5','6','7','8','9','10','11') NOT NULL,
 //     `nights` enum('1','2','3','4','5','6','7') NOT NULL,
 //     `pet` tinyint(1) NOT NULL,
 //     `ownPet` tinyint(1) NOT NULL,
-//     `ownPetDescription` text DEFAULT NULL,
+//     `ownPetDescription` text,
 //     `starDate` date NOT NULL,
 //     `endDate` date NOT NULL,
 //     `reason` enum('Studie','Starter','Scheiding','Anders') NOT NULL,
-//     `schoolFinished` text DEFAULT NULL,
-//     `schoolDoing` text DEFAULT NULL,
+//     `schoolFinished` text,
+//     `schoolDoing` text,
 //     `skill` set('EHBO','BHV','Reanimatie') DEFAULT NULL,
 //     `work` tinyint(1) NOT NULL,
-//     `workDescription` text DEFAULT NULL,
+//     `workDescription` text,
 //     `healthRisk` tinyint(1) NOT NULL,
-//     `healthRiskDescription` text DEFAULT NULL,
+//     `healthRiskDescription` text,
 //     `selfDescription` text NOT NULL,
 //     `selfWords` text NOT NULL,
 //     `idealSpace` text NOT NULL,
@@ -224,11 +228,14 @@ const compareDataVerhuurder = (verhuurderData, huurdersData) => {
 //     `offerYou` text NOT NULL,
 //     `importantNote` text NOT NULL,
 //     `volunteer` tinyint(1) NOT NULL,
-//     `volunteerDescription` text DEFAULT NULL,
-//     `religion` text DEFAULT NULL,
-//     `comment` text DEFAULT NULL,
-//     `overallcomment` text DEFAULT NULL
-// ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+//     `volunteerDescription` text,
+//     `religion` text,
+//     `comment` text,
+//     `overallcomment` text,
+//     PRIMARY KEY (id),
+//     KEY FK_seeker_preferences_userId (userId),
+//     CONSTRAINT `FK_seeker_preferences_userId` FOREIGN KEY (userId) REFERENCES user (id) ON DELETE CASCADE
+// ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 
 
 
@@ -250,7 +257,7 @@ const userController = {
         });
     },
     getProfile: (req, res) => {
-        console.log("(getProfile) userId: " + req.userId);
+        // console.log("(getProfile) userId: " + req.userId);
         db.query('SELECT * FROM user WHERE id = ?', [req.userId], (err, rows) => {
             if (err) {
                 return handleError(err, res);
@@ -261,7 +268,7 @@ const userController = {
                             if (err) {
                                 return handleError(err, res);
                             } else {
-                                console.log("(getProfile) amount of rows: " + rows.length);
+                                // console.log("(getProfile) amount of rows: " + rows.length);
                                 return res.status(200).json({
                                     message: 'Successfully fetched profile',
                                     user: rows[0],
@@ -274,7 +281,7 @@ const userController = {
                             if (err) {
                                 return handleError(err, res);
                             } else {
-                                console.log("(getProfile) amount of rows: " + rows.length);
+                                // console.log("(getProfile) amount of rows: " + rows.length);
                                 return res.status(200).json({
                                     message: 'Successfully fetched profile',
                                     user: rows[0],
@@ -378,13 +385,13 @@ const userController = {
             if (err) {
                 return handleError(err, res);
             } else {
-                console.log("(createVerhuurder) result: " + result);
+                // console.log("(createVerhuurder) result: " + result);
                 const userId = result[0].id;
-                mailer.sendMail(user.emailAddress, userId,(err, info) => {
+                mailer.sendMail(user.emailAddress, userId,(err) => {
                     if (err) {
                         return handleError(err, res);
                     } else {
-                        console.log("(createVerhuurder) info: " + info);
+                        // console.log("(createVerhuurder) info: " + info);
                     }
                 });
                 return res.status(200).json({
@@ -404,17 +411,17 @@ const userController = {
             });
         }
 
-        console.log(user.dateOfBirth)
+        // console.log(user.dateOfBirth)
 
         user.dateOfBirth = dateConverter(user.dateOfBirth)
         // --STAR--DATE
-        console.log(preferences.starDate)
+        // console.log(preferences.starDate)
         // --STAR--DATE
-        console.log(dateConverter(preferences.starDate))
+        // console.log(dateConverter(preferences.starDate))
         // --STAR--DATE
         preferences.starDate = dateConverter(preferences.starDate)
-        console.log(preferences.endDate)
-        console.log(dateConverter(preferences.endDate))
+        // console.log(preferences.endDate)
+        // console.log(dateConverter(preferences.endDate))
         preferences.endDate = dateConverter(preferences.endDate)
 
         preferences.pet = preferences.pet === 'Nee' || 'No' ? 0 : 1;
@@ -459,13 +466,13 @@ const userController = {
             if (err) {
                 return handleError(err, res);
             } else {
-                console.log("(createHuurder) result length: " + result.length);
+                // console.log("(createHuurder) result length: " + result.length);
                 const userId = result[0].id;
-                mailer.sendMail(user.emailAddress, userId, (err, info) => {
+                mailer.sendMail(user.emailAddress, userId, (err) => {
                     if (err) {
                         return handleError(err, res);
                     } else {
-                        console.log("(createVerhuurder) info: " + info);
+                        // console.log("(createVerhuurder) info: " + info);
                     }
                 });
                 return res.status(200).json({
@@ -506,13 +513,13 @@ const userController = {
             }
         }
 
-        console.log("(getAllVerhuurders) query: " + query);
+        // console.log("(getAllVerhuurders) query: " + query);
 
         db.query(query, (err, result) => {
             if (err) {
                 return handleError(err, res);
             } else {
-                console.log("(getAllVerhuurders) result length: " + result.length);
+                // console.log("(getAllVerhuurders) result length: " + result.length);
                 return res.status(200).json({
                     message: 'Successfully retrieved all verhuurders',
                     data: result
@@ -556,13 +563,13 @@ const userController = {
             }
         }
 
-        console.log("(getAllHuurders) query: " + query);
+        // console.log("(getAllHuurders) query: " + query);
 
         db.query(query, (err, result) => {
             if (err) {
                 return handleError(err, res);
             } else {
-                console.log("(getAllHuurders) result length: " + result.length);
+                // console.log("(getAllHuurders) result length: " + result.length);
                 return res.status(200).json({
                     message: 'Successfully retrieved all huurders',
                     data: result
@@ -572,7 +579,7 @@ const userController = {
     },
     getVerhuurderMatches: (req, res) => {
         const id = req.userId
-        console.log(id)
+        // console.log(id)
 
         db.query("SELECT * FROM user JOIN provider_preferences ON user.id = provider_preferences.userId WHERE user.id = ?", [id], (err, userResult) => {
             if (err) {
@@ -580,7 +587,7 @@ const userController = {
             }
 
             if (userResult.length === 0) {
-                console.log("User not found this one 1")
+                // console.log("User not found this one 1")
                 return res.status(404).json({
                     message: 'User not found',
                 });
@@ -622,7 +629,7 @@ const userController = {
                 }
             }
 
-            console.log("(getVerhuurderMatches) query: " + query);
+            // console.log("(getVerhuurderMatches) query: " + query);
 
             db.query(query, (err, seekerResult) => {
                 if (err) {
@@ -640,7 +647,7 @@ const userController = {
     },
     getHuurderMatches: (req, res) => {
         const id = req.userId
-        console.log(id)
+        // console.log(id)
 
         db.query("SELECT * FROM user JOIN seeker_preferences ON user.id = seeker_preferences.userId WHERE user.id = ?", [id], (err, userResult) => {
             if (err) {
@@ -648,7 +655,7 @@ const userController = {
             }
 
             if (userResult.length === 0) {
-                console.log("User not found this one 1")
+                // console.log("User not found this one 1")
                 return res.status(404).json({
                     message: 'User not found',
                 });
@@ -686,7 +693,7 @@ const userController = {
                 }
             }
 
-            console.log("(getHuurderMatches) query: " + query);
+            // console.log("(getHuurderMatches) query: " + query);
 
             db.query(query, (err, providerResult) => {
                 if (err) {
@@ -757,14 +764,17 @@ const userController = {
         });
     },
     updateUser: (req, res) => {
-        console.log("(updateUser) called")
+        // console.log("(updateUser) called")
         const { user, preferences } = req.body;
+        // console.log(req.params)
         const linkUserId = parseInt(req.params.id);
         const role = req.userRole;
         const userId = req.userId;
 
+        // console.log("(updateUser) linkUserId: " + linkUserId)
+        // console.log("(updateUser) userId: " + userId)
         if (userId !== linkUserId) {
-            console.log("(updateUser) Unauthorized")
+            // console.log("(updateUser) Unauthorized")
             return res.status(401).json({
                 message: 'Unauthorized'
             });
@@ -843,7 +853,7 @@ const userController = {
                 ];
 
         const handleUpdateSuccess = (result) => {
-            console.log("(updateUser) Successfully updated user")
+            // console.log("(updateUser) Successfully updated user")
             return res.status(200).json({
                 message: 'Successfully updated user',
                 data: result
@@ -851,15 +861,15 @@ const userController = {
         };
 
         db.query(updateUserQuery, updateUserParams, (err) => {
-            console.log("(updateUser) updateUserQuery called")
+            // console.log("(updateUser) updateUserQuery called")
             if (err) {
-                console.log("(updateUser) updateUserQuery error")
+                // console.log("(updateUser) updateUserQuery error")
                 return handleError(err, res);
             }
             db.query(updatePreferencesQuery, updatePreferencesParams, (err, result) => {
-                console.log("(updateUser) updatePreferencesQuery called")
+                // console.log("(updateUser) updatePreferencesQuery called")
                 if (err) {
-                    console.log("(updateUser) updatePreferencesQuery error")
+                    // console.log("(updateUser) updatePreferencesQuery error")
                     return handleError(err, res);
                 }
 
@@ -873,7 +883,7 @@ const userController = {
             if (err) {
                 return handleError(err, res);
             } else {
-                console.log("(deleteUser) result length: " + result.length);
+                // console.log("(deleteUser) result length: " + result.length);
                 return res.status(200).json({
                     message: 'Successfully deleted user',
                     data: result

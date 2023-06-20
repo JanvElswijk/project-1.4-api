@@ -10,17 +10,17 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb' }));
 
 app.get('/', (req, res) => {
-    //TODO: Add home page
-    return res.send('Hello World!');
+    return res.status(200).json({message: 'Dit is niet de goeie route, gebruik /api/user of /about'});
 });
 
 app.get('/about', (req, res) => {
-    //TODO: Add about page
-    return res.send('About page');
+    return res.status(200).json({ message: 'Dit is de backend van MijnWoongenoot, gebruik /api/user voor alle functionaliteiten' });
 });
 
 app.use('/api/user', userRoutes);
 
 app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`);
+    console.log(`MijnWoongenoot app listening on port ${port}`);
 });
+
+module.exports = app;

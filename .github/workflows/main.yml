@@ -5,12 +5,49 @@ on:
     branches:
       - main
 jobs:
-  hello_world_job:
+  Mocha-tests:
     runs-on: ubuntu-latest
-
+    env:
+      MYSQL_ROOT_PASSWORD: root
+      DB_HOST: '127.0.0.1'
+      DB_PORT: '3306'
+      DB_DATABASE: mijnwoongenoot
+      DB_USER: root
+      DB_PASSWORD: root
+      JWT_SECRET: NeverGonnaGiveYouUp
+    services:
+      mysql:
+        image: mysql:5.7
+        ports:
+          - '3306'
     steps:
-      - name: Print Hello World
-        run: echo "Hello, World!"
+      - uses: actions/checkout@main
+
+      - name: Start MySQL connection from host
+        run: |
+          sudo /etc/init.d/mysql start
+          sudo apt-get install -y mysql-client
+          mysql -uroot -p${{ env.MYSQL_ROOT_PASSWORD }} -e "SHOW DATABASES;"
+          mysql -uroot -p${{ env.MYSQL_ROOT_PASSWORD }} -e "CREATE DATABASE ${{env.DB_DATABASE}};"
+
+      - name: Import database script
+        run: |
+          mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} < mijnwoongenoot.sql
+          mysql -uroot -p${{env.MYSQL_ROOT_PASSWORD}} ${{env.DB_DATABASE}} -e "SHOW TABLES;"
+
+      - name: npm install
+        run: |
+          npm install
+
+      - name: npm install mocha
+        run: |
+          npm i -g mocha
+
+
+      - name: npm test
+        run: |
+          npm test -- --DB_PASSWORD {{env.MYSQL_ROOT_PASSWORD}} --DB_USER root --DB_NAME ${{env.DB_DATABASE}}
+
   Railway-deploy:
     needs: hello_world_job
     runs-on: ubuntu-latest

@@ -6,7 +6,7 @@ const authConfig = require('../config/auth.config');
 const authController = {
     login: (req, res) => {
         const { emailAddress, password } = req.body;
-        console.log(req.body)
+        // console.log(req.body)
 
         const sql = 'SELECT * FROM user WHERE emailAddress = ?';
         const params = [emailAddress];
@@ -17,8 +17,8 @@ const authController = {
             } else {
                 if (rows.length > 0 && rows[0].isActive === 1) {
                     if (bcrypt.compareSync(password, rows[0].password)) {
-                        console.log("password match" + rows[0].id)
-                        console.log(password)
+                        // console.log("password match" + rows[0].id)
+                        // console.log(password)
                         return res.status(200).json(
                             {
                                 token: jwt.sign({ id: rows[0].id, role: rows[0].role }, authConfig.secret),
@@ -43,19 +43,19 @@ const authController = {
         });
     },
     validateToken: (req, res, next) => {
-        console.log("validate token");
-        console.log(req.headers.authorization);
+        // console.log("validate token");
+        // console.log(req.headers.authorization);
         const token = req.headers.authorization.split(' ')[1];
         if (!token) {
-            console.log("no token")
+            // console.log("no token")
             return res.status(401).json({ error: 'No token provided' });
         } else {
             jwt.verify(token, authConfig.secret, (err, decoded) => {
                 if (err) {
-                    console.log("invalid token")
+                    // console.log("invalid token")
                     return res.status(401).json({error: 'Invalid token'});
                 } else {
-                    console.log("valid token")
+                    // console.log("valid token")
                     req.userId = decoded.id;
                     req.userRole = decoded.role;
                     next();
