@@ -295,6 +295,9 @@ describe('App', () => {
                     .post('/api/user/verhuurder')
                     .send(providerBody)
                     .end((err, res) => {
+                        if (res.error) {
+                            res.body.error.should.be.eql('Email address already exists');
+                        }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         // res.body.length.should.be.eql(0);
@@ -331,6 +334,9 @@ describe('App', () => {
                     .post('/api/user/verhuurder')
                     .send(providerBody)
                     .end((err, res) => {
+                        if (res.error) {
+                            res.body.error.should.be.eql('Email address already exists');
+                        }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         // res.body.length.should.be.eql(0);
@@ -387,6 +393,9 @@ describe('App', () => {
                     .post('/api/user/verhuurder')
                     .send(providerBody)
                     .end((err, res) => {
+                        if (res.error) {
+                            res.body.error.should.be.eql('Email address already exists');
+                        }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         // res.body.length.should.be.eql(0);
