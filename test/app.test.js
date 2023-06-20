@@ -246,7 +246,7 @@ describe('App', () => {
                     .end((err, res) => {
                         res.should.have.status(200);
                         res.body.should.be.a('object');
-                        // res.body.length.should.be.eql(0);
+                        res.body.data.length.should.be.eql(20);
                         done();
                     });
             });
