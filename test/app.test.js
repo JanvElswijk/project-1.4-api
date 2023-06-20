@@ -295,9 +295,9 @@ describe('App', () => {
                     .post('/api/user/verhuurder')
                     .send(providerBody)
                     .end((err, res) => {
-                        if (res.error) {
-                            console.log(res.error);
-                        }
+                        // if (res.error) {
+                        //     console.log(res.error);
+                        // }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         // res.body.length.should.be.eql(0);
@@ -334,9 +334,9 @@ describe('App', () => {
                     .post('/api/user/verhuurder')
                     .send(providerBody)
                     .end((err, res) => {
-                        if (res.error) {
-                            console.log(res.error);
-                        }
+                        // if (res.error) {
+                        //     console.log(res.error);
+                        // }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         // res.body.length.should.be.eql(0);
@@ -393,9 +393,9 @@ describe('App', () => {
                     .post('/api/user/verhuurder')
                     .send(providerBody)
                     .end((err, res) => {
-                        if (res.error) {
-                            console.log(res.error);
-                        }
+                        // if (res.error) {
+                        //     console.log(res.error);
+                        // }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
                         // res.body.length.should.be.eql(0);
