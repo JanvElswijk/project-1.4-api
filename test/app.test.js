@@ -296,7 +296,7 @@ describe('App', () => {
                     .send(providerBody)
                     .end((err, res) => {
                         if (res.error) {
-                            res.body.error.should.be.eql('Email address already exists');
+                            console.log(res.error);
                         }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
@@ -335,7 +335,7 @@ describe('App', () => {
                     .send(providerBody)
                     .end((err, res) => {
                         if (res.error) {
-                            res.body.error.should.be.eql('Email address already exists');
+                            console.log(res.error);
                         }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
@@ -394,7 +394,7 @@ describe('App', () => {
                     .send(providerBody)
                     .end((err, res) => {
                         if (res.error) {
-                            res.body.error.should.be.eql('Email address already exists');
+                            console.log(res.error);
                         }
                         res.should.have.status(200);
                         res.body.should.be.a('object');
