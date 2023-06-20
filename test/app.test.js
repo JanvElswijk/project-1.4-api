@@ -1,3 +1,6 @@
+process.env.DB_DATABASE =
+    process.env.DB_DATABASE || 'mijnwoongenoot';
+
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
