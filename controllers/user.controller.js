@@ -358,11 +358,11 @@ const userController = {
             });
         }
 
-        preferences.house = preferences.house === 'Nee' || 'No' ? 0 : 1;
-        preferences.furniture = preferences.furniture === 'Nee' || 'No' ? 0 : 1;
-        preferences.volunteer = preferences.volunteer === 'Nee' || 'No' ? 0 : 1;
-        preferences.work = preferences.work === 'Nee' || 'No' ? 0 : 1;
-        preferences.pet = preferences.pet === 'Nee' || 'No' ? 0 : 1;
+        preferences.house = (preferences.house === 'Nee' || 'No') ? 0 : 1;
+        preferences.furniture = (preferences.furniture === 'Nee' || 'No') ? 0 : 1;
+        preferences.volunteer = (preferences.volunteer === 'Nee' || 'No') ? 0 : 1;
+        preferences.work = (preferences.work === 'Nee' || 'No') ? 0 : 1;
+        preferences.pet = (preferences.pet === 'Nee' || 'No') ? 0 : 1;
 
         user.dateOfBirth = dateConverter(user.dateOfBirth)
 
@@ -424,11 +424,11 @@ const userController = {
         // console.log(dateConverter(preferences.endDate))
         preferences.endDate = dateConverter(preferences.endDate)
 
-        preferences.pet = preferences.pet === 'Nee' || 'No' ? 0 : 1;
-        preferences.ownPet = preferences.ownPet === 'Nee' || 'No' ? 0 : 1;
-        preferences.work = preferences.work === 'Nee' || 'No' ? 0 : 1;
-        preferences.healthRisk = preferences.healthRisk === 'Nee' || 'No' ? 0 : 1;
-        preferences.volunteer = preferences.volunteer === 'Nee' || 'No' ? 0 : 1;
+        preferences.pet = (preferences.pet === 'Nee' || 'No') ? 0 : 1;
+        preferences.ownPet = (preferences.ownPet === 'Nee' || 'No') ? 0 : 1;
+        preferences.work = (preferences.work === 'Nee' || 'No') ? 0 : 1;
+        preferences.healthRisk = (preferences.healthRisk === 'Nee' || 'No') ? 0 : 1;
+        preferences.volunteer = (preferences.volunteer === 'Nee' || 'No') ? 0 : 1;
 
 
         user.password = bcrypt.hashSync(user.password, 10);
@@ -787,18 +787,18 @@ const userController = {
 
         switch (role) {
             case 'Verhuurder':
-                preferences.house = preferences.house === 'Nee' || 'No' ? 0 : 1;
-                preferences.furniture = preferences.furniture === 'Nee' || 'No' ? 0 : 1;
-                preferences.volunteer = preferences.volunteer === 'Nee' || 'No' ? 0 : 1;
-                preferences.work = preferences.work === 'Nee' || 'No' ? 0 : 1;
-                preferences.pet = preferences.pet === 'Nee' || 'No' ? 0 : 1;
+                preferences.house = (preferences.house === 'Nee' || 'No') ? 0 : 1;
+                preferences.furniture = (preferences.furniture === 'Nee' || 'No') ? 0 : 1;
+                preferences.volunteer = (preferences.volunteer === 'Nee' || 'No') ? 0 : 1;
+                preferences.work = (preferences.work === 'Nee' || 'No') ? 0 : 1;
+                preferences.pet = (preferences.pet === 'Nee' || 'No') ? 0 : 1;
                 break;
             case 'Huurder':
-                preferences.pet = preferences.pet === 'Nee' || 'No' ? 0 : 1;
-                preferences.ownPet = preferences.ownPet === 'Nee' || 'No' ? 0 : 1;
-                preferences.work = preferences.work === 'Nee' || 'No' ? 0 : 1;
-                preferences.healthRisk = preferences.healthRisk === 'Nee' || 'No' ? 0 : 1;
-                preferences.volunteer = preferences.volunteer === 'Nee' || 'No' ? 0 : 1;
+                preferences.pet = (preferences.pet === 'Nee' || 'No') ? 0 : 1;
+                preferences.ownPet = (preferences.ownPet === 'Nee' || 'No') ? 0 : 1;
+                preferences.work = (preferences.work === 'Nee' || 'No') ? 0 : 1;
+                preferences.healthRisk = (preferences.healthRisk === 'Nee' || 'No') ? 0 : 1;
+                preferences.volunteer = (preferences.volunteer === 'Nee' || 'No') ? 0 : 1;
                 preferences.starDate = dateConverter(preferences.starDate)
                 preferences.endDate = dateConverter(preferences.endDate)
                 break;
